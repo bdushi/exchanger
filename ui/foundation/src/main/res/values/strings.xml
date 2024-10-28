@@ -1,0 +1,5 @@
+<resources>
+    <string name="name">Exchanger</string>
+    <string name="my_balances">My balances</string>
+    <string name="currency_exchanger">Currency Exchanger</string>
+</resources>
