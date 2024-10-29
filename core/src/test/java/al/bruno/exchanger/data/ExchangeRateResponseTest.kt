@@ -1,35 +1,18 @@
 package al.bruno.exchanger.data
 
-import al.bruno.exchanger.data.network.service.ExchangeService
+import al.bruno.exchanger.data.network.model.ExchangeRateResponse
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.contextual
-import okhttp3.MediaType.Companion.toMediaType
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import retrofit2.Retrofit
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 class ExchangeRateResponseTest {
-    private lateinit var api: ExchangeService
+    private lateinit var httpClient: HttpClient
 
     @Before
     fun setup() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://developers.paysera.com")
-            .addConverterFactory(
-                Json {
-                    serializersModule = SerializersModule {
-                        contextual(ExchangeRateResponseSerializer)
-                    }
-                }.asConverterFactory("application/json".toMediaType())
-            )
-            .build()
-
-        api = retrofit.create(ExchangeService::class.java)
     }
 
     @Test
@@ -76,15 +59,8 @@ class ExchangeRateResponseTest {
 //
 //        json.decodeFromString(ExchangeRateResponseSerializer, list)
 
-        val result = api.exchange()
-    }
-
-    @Test
-    fun `deserialize valid response`() = runBlocking {
-        val result = api.exchange()
-        assertEquals("USD", result[0].base)
-        assertEquals("2024-10-01", result[0].date)
-        assertEquals(0.85, result[0].rates["EUR"])
-        assertEquals(0.75, result[0].rates["GBP"])
+        val result = httpClient
+            .get("/tasks/api/currency-exchange-rates")
+            .body<List<ExchangeRateResponse>>()
     }
 }

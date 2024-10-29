@@ -2,9 +2,7 @@ package al.bruno.exchanger
 
 import al.bruno.exchanger.data.di.dataSourceModule
 import al.bruno.exchanger.data.di.databaseModule
-import al.bruno.exchanger.data.di.gsonModule
-import al.bruno.exchanger.data.di.networkModule
-import al.bruno.exchanger.data.di.serviceModule
+import al.bruno.exchanger.data.di.httpClient
 import al.bruno.exchanger.exchange.impl.di.exchangeModule
 import al.bruno.exchanger.ui.converter.di.converterUIModule
 import al.bruno.exchanger.ui.exchange.di.exchangeUIModule
@@ -24,14 +22,12 @@ class ExchangerApp : Application() {
             // Load modules
             modules(
                 listOf(
-                    networkModule,
+                    httpClient,
                     exchangeModule,
                     exchangeUIModule,
                     converterUIModule,
                     databaseModule,
                     dataSourceModule,
-                    serviceModule,
-                    gsonModule
                 )
             )
         }

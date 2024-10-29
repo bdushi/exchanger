@@ -1,4 +1,4 @@
-package al.bruno.exchanger.data.network
+package al.bruno.exchanger.data.network.serializer
 
 import al.bruno.exchanger.data.network.model.ExchangeRateResponse
 import com.google.gson.JsonDeserializationContext

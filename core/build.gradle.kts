@@ -42,25 +42,23 @@ android {
 }
 
 dependencies {
-    //
-    implementation(libs.converter.gson)
-    implementation(libs.converter.kotlinx.serialization)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.logging.interceptor)
-    implementation(libs.retrofit)
-    implementation("com.google.code.gson:gson:2.11.0")
-
     // Koin
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
 
     // Room
     implementation(libs.room.runtime)
-    ksp(libs.room.compiler
-    )
-    testImplementation(libs.retrofit)
+    ksp(libs.room.compiler)
+
+    // Ktor
+    implementation (libs.ktor.client.core)
+    implementation (libs.ktor.client.cio)
+    implementation (libs.ktor.client.content.negotiation)
+    implementation (libs.ktor.client.logging)
+    implementation (libs.ktor.client.gson)
+    implementation (libs.kotlinx.serialization.json)
+
     testImplementation(libs.kotlinx.serialization.json)
-    testImplementation(libs.converter.kotlinx.serialization)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

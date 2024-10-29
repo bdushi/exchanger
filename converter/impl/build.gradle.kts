@@ -37,7 +37,7 @@ dependencies {
     implementation(project(":common:core"))
     implementation(project(":core"))
     // Ktor
-    implementation(libs.retrofit)
+    implementation(libs.ktor.client.core)
     // Room
     implementation(libs.room.runtime)
     // Koin

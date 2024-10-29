@@ -1,74 +1,43 @@
 package al.bruno.exchanger.data.di
 
 import al.bruno.exchanger.data.BuildConfig
-import al.bruno.exchanger.data.network.ExchangeRateResponseDeserializer
-import al.bruno.exchanger.data.network.model.ExchangeRateResponse
-import al.bruno.exchanger.data.network.service.ExchangeService
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import al.bruno.exchanger.data.network.serializer.ExchangeRateResponseDeserializer
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.ANDROID
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.URLProtocol
+import io.ktor.serialization.gson.gson
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
-val networkModule = module {
-    single<Retrofit> {
-        Retrofit.Builder()
-            .baseUrl(BuildConfig.HOST) // Make sure this is properly set in your BuildConfig
-            .client(
-                OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY // Log all HTTP requests/responses
-                    })
-                    .build()
-            )
-            .addConverterFactory(GsonConverterFactory.create(get())) // Use the injected Gson instance
-            // Uncomment this if you switch to Kotlin Serialization
-            // .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .build()
-    }
-}
 
-val gsonModule = module {
+val httpClient = module {
     single {
-        GsonBuilder()
-            .registerTypeAdapter(
-                List::class.java,
-                ExchangeRateResponseDeserializer()
-            )
-            .create()
+        HttpClient(CIO) {
+            defaultRequest {
+                url {
+                    protocol = URLProtocol.HTTPS
+                    host = BuildConfig.HOST
+                }
+            }
+            install(Logging) {
+                level = LogLevel.BODY
+                logger = Logger.ANDROID
+            }
+            install(ContentNegotiation) {
+                gson {
+                    setPrettyPrinting()
+                    disableHtmlEscaping()
+                    registerTypeAdapter(
+                        List::class.java,
+                        ExchangeRateResponseDeserializer()
+                    )
+                }
+            }
+        }
     }
 }
-
-//val jsonModule = module {
-//    single {
-//        Json {
-//            ignoreUnknownKeys = true
-//            prettyPrint = true
-//            isLenient = true
-//            serializersModule = SerializersModule {
-//                polymorphic(List::class) {
-//                    ExchangeRateResponseSerializer
-//                }
-//            }
-//        }
-//    }
-//}
-
-val jsonModule = module {
-    single {
-        GsonBuilder()
-            .registerTypeAdapter(
-                object : TypeToken<List<ExchangeRateResponse>>() {}.type,
-                ExchangeRateResponseDeserializer()
-            )
-            .create()
-    }
-}
-
-val serviceModule = module {
-    single<ExchangeService> { get<Retrofit>().create(ExchangeService::class.java) }
-}
-
-
