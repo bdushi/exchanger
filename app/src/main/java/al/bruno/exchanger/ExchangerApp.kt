@@ -1,5 +1,6 @@
 package al.bruno.exchanger
 
+import al.bruno.exchanger.currency.converter.impl.di.converterModule
 import al.bruno.exchanger.data.di.dataSourceModule
 import al.bruno.exchanger.data.di.databaseModule
 import al.bruno.exchanger.data.di.httpClient
@@ -28,6 +29,7 @@ class ExchangerApp : Application() {
                     converterUIModule,
                     databaseModule,
                     dataSourceModule,
+                    converterModule,
                 )
             )
         }

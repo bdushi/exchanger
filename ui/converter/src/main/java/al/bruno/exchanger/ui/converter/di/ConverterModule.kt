@@ -5,5 +5,5 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val converterUIModule = module{
-    viewModel<ConverterViewModel> { ConverterViewModel(get()) }
+    viewModel<ConverterViewModel> { ConverterViewModel(get(), get()) }
 }

@@ -48,6 +48,7 @@ dependencies {
 
     // Room
     implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
     ksp(libs.room.compiler)
 
     // Ktor
@@ -56,7 +57,7 @@ dependencies {
     implementation (libs.ktor.client.content.negotiation)
     implementation (libs.ktor.client.logging)
     implementation (libs.ktor.client.gson)
-    implementation (libs.kotlinx.serialization.json)
+    implementation (libs.ktor.client.serialization)
 
     testImplementation(libs.kotlinx.serialization.json)
     testImplementation(libs.junit)

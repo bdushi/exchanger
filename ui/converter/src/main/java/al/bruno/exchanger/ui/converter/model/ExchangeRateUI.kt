@@ -4,4 +4,6 @@ data class ExchangeRateUI(
     val base: String,
     val date: String,
     val rates: Map<String, Double>
-)
+) {
+    override fun toString() = base
+}

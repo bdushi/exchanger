@@ -33,7 +33,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":exchange:api"))
+    implementation(project(":converter:api"))
     implementation(project(":common:core"))
     implementation(project(":core"))
     // Ktor

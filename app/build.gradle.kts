@@ -72,6 +72,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":exchange:impl"))
+    implementation(project(":converter:impl"))
     implementation(project(":ui:exchange"))
     implementation(project(":ui:converter"))
     implementation(project(":ui:foundation"))

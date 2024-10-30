@@ -10,7 +10,10 @@ import io.ktor.client.plugins.logging.ANDROID
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.accept
+import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
+import io.ktor.http.contentType
 import io.ktor.serialization.gson.gson
 import org.koin.dsl.module
 
@@ -28,7 +31,16 @@ val httpClient = module {
                 level = LogLevel.BODY
                 logger = Logger.ANDROID
             }
+
             install(ContentNegotiation) {
+                /*Json {
+                    serializersModule = SerializersModule {
+                        contextual(ExchangeRateResponseListSerializer) // Register the custom serializer
+                    }
+                    ignoreUnknownKeys = true
+                    isLenient = true
+                    prettyPrint = true
+                }*/
                 gson {
                     setPrettyPrinting()
                     disableHtmlEscaping()
@@ -37,6 +49,10 @@ val httpClient = module {
                         ExchangeRateResponseDeserializer()
                     )
                 }
+            }
+            defaultRequest {
+                contentType(ContentType.Application.Json)
+                accept(ContentType.Application.Json)
             }
         }
     }

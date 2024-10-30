@@ -1,10 +1,13 @@
 package al.bruno.exchanger.data.local.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.Embedded
+import androidx.room.Relation
 
-@Entity
 data class Exchange(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long
+    @Embedded val balance: Balance,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "balanceId"
+    )
+    val transaction: List<Transaction>
 )

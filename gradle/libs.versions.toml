@@ -18,9 +18,6 @@ protobuf = "4.26.1"
 room = "2.6.1"
 kotlinxCoroutinesCore = "1.9.0"
 navigation = "2.9.0-alpha01"
-appcompat = "1.7.0"
-material = "1.12.0"
-retrofit = "2.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -57,6 +54,7 @@ ktor-client-gson = { group = "io.ktor", name = "ktor-serialization-gson", versio
 
 room-runtime = {group = "androidx.room", name = "room-runtime", version.ref = "room"}
 room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "room"}
+room-ktx = {group = "androidx.room", name = "room-ktx", version.ref = "room"}
 
 protobuf = { group = "com.google.protobuf", name = "protobuf-javalite", version.ref = "protobuf" }
 preference-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}

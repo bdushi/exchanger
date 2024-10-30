@@ -9,9 +9,10 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 
-object ExchangeRateResponseSerializer : KSerializer<List<ExchangeRateResponse>> {
+object ExchangeRateResponseListSerializer : KSerializer<List<ExchangeRateResponse>> {
     private val singleSerializer = ExchangeRateResponse.serializer()
     private val listSerializer = ListSerializer(singleSerializer)
 
@@ -23,26 +24,11 @@ object ExchangeRateResponseSerializer : KSerializer<List<ExchangeRateResponse>> 
 
     override fun deserialize(decoder: Decoder): List<ExchangeRateResponse> {
         val jsonDecoder = decoder as? JsonDecoder
-            ?: throw SerializationException("Expected JsonDecoder but got ${decoder::class}")
-
-        return when (val element = jsonDecoder.decodeJsonElement()) {
-            is JsonObject -> {
-                try {
-                    listOf(jsonDecoder.json.decodeFromJsonElement(singleSerializer, element))
-                } catch (e: Exception) {
-                    throw SerializationException("Failed to decode single object: ${e.message}")
-                }
-            }
-            is JsonArray -> {
-                try {
-                    jsonDecoder.json.decodeFromJsonElement(listSerializer, element)
-                } catch (e: Exception) {
-                    throw SerializationException("Failed to decode array: ${e.message}")
-                }
-            }
-            else -> throw SerializationException(
-                "Expected JsonObject or JsonArray but got ${element::class}"
-            )
+            ?: throw SerializationException("Expected JsonDecoder for ExchangeRateResponse")
+        return when (val element: JsonElement = jsonDecoder.decodeJsonElement()) {
+            is JsonObject -> listOf(jsonDecoder.json.decodeFromJsonElement(singleSerializer, element))
+            is JsonArray -> jsonDecoder.json.decodeFromJsonElement(listSerializer, element)
+            else -> throw SerializationException("Expected JsonObject or JsonArray but got ${element::class}")
         }
     }
 }
