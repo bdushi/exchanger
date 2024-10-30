@@ -59,6 +59,7 @@ dependencies {
 
     implementation(project(":ui:foundation"))
     implementation(project(":exchange:api"))
+    implementation(project(":converter:api"))
     implementation(project(":common:core"))
 
     testImplementation(libs.junit)

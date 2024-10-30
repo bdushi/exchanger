@@ -56,6 +56,8 @@ fun NewExchangeScreen(
     var rates by remember { mutableStateOf<List<RateUI>>(emptyList()) }
 
     converterViewModel.processIntent(ConverterIntent.GetExchangeRate)
+//    converterViewModel.balance()
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -83,6 +85,9 @@ fun NewExchangeScreen(
                 .padding(it)
                 .padding(8.dp)
         ) {
+            Column {
+
+            }
             when(exchangeRate) {
                 is State.Error -> {
                     Box(
@@ -168,7 +173,7 @@ fun NewExchangeScreen(
                             .fillMaxWidth(),
 
                         onClick = {
-
+                            converterViewModel.insert()
                         }) {
                         Text(
                             modifier = modifier
