@@ -4,7 +4,7 @@ import al.bruno.exchanger.ui.foundation.arch.State
 
 // UI state
 data class ConversionState(
-    val fromValue: String = "",
+    val fromValue: String = "1",
     val toValue: String = "",
     val fromRate: ExchangeRateUI? = null,
     val toRate: RateUI? = null,

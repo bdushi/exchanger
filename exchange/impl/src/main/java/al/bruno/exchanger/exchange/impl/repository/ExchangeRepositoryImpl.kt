@@ -1,6 +1,7 @@
 package al.bruno.exchanger.exchange.impl.repository
 
 import al.bruno.exchanger.data.local.BalanceLocalDataSource
+import al.bruno.exchanger.data.local.ExchangeLocalDataSource
 import al.bruno.exchanger.data.local.TransactionLocalDataSource
 import al.bruno.exchanger.data.local.model.Type
 import al.bruno.exchanger.data.network.ExchangeNetworkDataSource
@@ -11,11 +12,13 @@ import al.bruno.exchanger.exchange.impl.ext.toExchange
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 class ExchangeRepositoryImpl(
     private val messagesLocalDataSource: ExchangeNetworkDataSource,
     private val balanceDataSource: BalanceLocalDataSource,
-    private val transactionDataSource: TransactionLocalDataSource
+    private val exchangeLocalDataSource: ExchangeLocalDataSource,
+    private val transactionDataSource: TransactionLocalDataSource,
 ) : ExchangeRepository {
     override suspend fun getMessages(): List<ExchangeRate> =
         messagesLocalDataSource
@@ -58,4 +61,11 @@ class ExchangeRepositoryImpl(
                 finalBalances.map { Exchange(it.value, it.key, 0.0) }
             }
     }
+
+    override suspend fun exchangeView(): Flow<List<Exchange>> =
+        exchangeLocalDataSource.exchange().map {
+            it.map { exchange ->
+                exchange.toExchange()
+            }
+        }
 }

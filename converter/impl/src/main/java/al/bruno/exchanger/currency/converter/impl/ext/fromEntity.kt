@@ -21,6 +21,7 @@ fun TransactionEntity.toTransaction() = Transaction(
     balanceId = balanceId,
     commission = commission,
     currency = currency,
+    rate = rate,
     dateCreated = dateCreated,
     lastUpdated = lastUpdated
 )

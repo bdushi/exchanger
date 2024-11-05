@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
-class ExchangeRateResponseTest {
+class ExchangeDaoRateResponseTest {
     private lateinit var httpClient: HttpClient
 
     @Before

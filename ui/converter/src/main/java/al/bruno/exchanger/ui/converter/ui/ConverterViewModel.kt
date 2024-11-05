@@ -64,6 +64,7 @@ class ConverterViewModel(
                                 balanceId = balanceUI.id,
                                 commission = 1.0,
                                 currency = toRate.currency,
+                                rate = toRate.rates,
                                 dateCreated = LocalDate.now(),
                                 lastUpdated = LocalDate.now()
                             )

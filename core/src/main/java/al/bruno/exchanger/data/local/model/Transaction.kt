@@ -23,6 +23,7 @@ data class Transaction(
     val value: Double,
     val balanceId: Long,
     val commission: Double,
+    val rate: Double,
     val currency: String,
     val dateCreated: LocalDate,
     val lastUpdated: LocalDate

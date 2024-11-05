@@ -86,7 +86,8 @@ fun ExchangeContent(
                     onClick = {
                         onSubmit(balance.data)
                     },
-                    enabled = balance.data.amount >= 0 && uiState.toRate != null
+                    enabled =
+                    balance.data.amount >= 0 && uiState.toRate != null && uiState.toValue.isNotEmpty() && uiState.fromValue.isNotEmpty()
                 ) {
                     Text(
                         text = stringResource(R.string.submit),

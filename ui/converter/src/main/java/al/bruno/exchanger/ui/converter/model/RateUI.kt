@@ -1,6 +1,7 @@
 package al.bruno.exchanger.ui.converter.model
 
 import al.bruno.exchanger.common.core.formatToFourDecimals
+import al.bruno.exchanger.common.core.stringToDouble
 
 data class RateUI(
     val currency: String,
@@ -10,18 +11,18 @@ data class RateUI(
 }
 
 fun RateUI.calculateConvertedRate(from: String): String {
-    return if (from.isEmpty()) {
+    return if (from.isEmpty() || from.isBlank()) {
         ""
     } else {
-        (from.toDouble() * rates).formatToFourDecimals()
+        (from.stringToDouble() * rates).formatToFourDecimals()
     }
 }
 
 fun RateUI?.calculateInverseConvertedRate(to: String): String {
-    return if (to.isEmpty()) {
-        "1.0"
+    return if (to.isEmpty() || to.isBlank()) {
+        ""
     } else {
-        val rate = if(this?.rates != null) (1 / rates) * to.toDouble() else 1.0
+        val rate = if(this?.rates != null) (1 / rates) * to.stringToDouble() else 1.0
         rate.formatToFourDecimals()
     }
 }
