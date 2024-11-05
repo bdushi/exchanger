@@ -20,6 +20,11 @@ class ConverterRepositoryImpl(
             transaction.toTransactionEntity()
         )
 
+    override suspend fun insert(transactions: List<Transaction>): List<Long> =
+        transactionLocalDataSource.insert(transactions.map {
+            it.toTransactionEntity()
+        })
+
     override suspend fun balance(): Balance =
         balanceLocalDataSource
             .balance().toBalance()

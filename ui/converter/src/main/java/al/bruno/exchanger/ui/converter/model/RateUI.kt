@@ -1,6 +1,6 @@
 package al.bruno.exchanger.ui.converter.model
 
-import al.bruno.exchanger.common.core.formatToFourDecimals
+import al.bruno.exchanger.common.core.formatToDecimals
 import al.bruno.exchanger.common.core.stringToDouble
 
 data class RateUI(
@@ -14,7 +14,7 @@ fun RateUI.calculateConvertedRate(from: String): String {
     return if (from.isEmpty() || from.isBlank()) {
         ""
     } else {
-        (from.stringToDouble() * rates).formatToFourDecimals()
+        (from.stringToDouble() * rates).formatToDecimals()
     }
 }
 
@@ -23,6 +23,6 @@ fun RateUI?.calculateInverseConvertedRate(to: String): String {
         ""
     } else {
         val rate = if(this?.rates != null) (1 / rates) * to.stringToDouble() else 1.0
-        rate.formatToFourDecimals()
+        rate.formatToDecimals()
     }
 }

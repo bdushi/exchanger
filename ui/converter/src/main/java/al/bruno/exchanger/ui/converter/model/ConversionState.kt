@@ -9,7 +9,7 @@ data class ConversionState(
     val fromRate: ExchangeRateUI? = null,
     val toRate: RateUI? = null,
     val availableRates: List<RateUI> = emptyList(),
-    val transactionUI: State<Long> = State.Loading,
+    val transactionUI: State<List<Long>> = State.Loading,
     val balanceUI: State<BalanceUI> = State.Loading,
     val exchangeRateUI: State<List<ExchangeRateUI>> = State.Loading,
 )

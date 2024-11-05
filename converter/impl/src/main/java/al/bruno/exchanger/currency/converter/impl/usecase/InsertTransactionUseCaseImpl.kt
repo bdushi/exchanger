@@ -6,5 +6,5 @@ import al.bruno.exchanger.currency.converter.api.usecase.InsertTransactionUseCas
 
 class InsertTransactionUseCaseImpl(private val converterRepository: ConverterRepository) :
     InsertTransactionUseCase {
-    override suspend fun invoke(transaction: Transaction) = converterRepository.insert(transaction)
+    override suspend fun invoke(transaction: List<Transaction>) = converterRepository.insert(transaction)
 }

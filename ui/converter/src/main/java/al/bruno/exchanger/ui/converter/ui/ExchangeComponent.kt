@@ -1,5 +1,6 @@
 package al.bruno.exchanger.ui.converter.ui
 
+import al.bruno.exchanger.common.core.stringToDouble
 import al.bruno.exchanger.ui.converter.model.BalanceUI
 import al.bruno.exchanger.ui.converter.model.ConversionState
 import al.bruno.exchanger.ui.converter.model.ExchangeRateUI
@@ -86,8 +87,7 @@ fun ExchangeContent(
                     onClick = {
                         onSubmit(balance.data)
                     },
-                    enabled =
-                    balance.data.amount >= 0 && uiState.toRate != null && uiState.toValue.isNotEmpty() && uiState.fromValue.isNotEmpty()
+                    enabled = balance.data.amount >= uiState.fromValue.stringToDouble(0.0) && uiState.toRate != null && uiState.toValue.isNotEmpty() && uiState.fromValue.isNotEmpty()
                 ) {
                     Text(
                         text = stringResource(R.string.submit),

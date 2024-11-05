@@ -52,21 +52,33 @@ class ConverterViewModel(
             val toRate = _uiState.value.toRate ?: return@launch
             val fromAmount = _uiState.value.fromValue.toDoubleOrNull() ?: return@launch
             val fromRate = _uiState.value.fromRate ?: return@launch
-            val rate = fromRate.rates[toRate.currency] ?: return@launch
             try {
                 _uiState.value = _uiState.value.copy(
                     transactionUI = State.Success(
                         insertTransactionUseCase(
-                            Transaction(
-                                id = 0,
-                                type = Type.SELL,
-                                value = fromAmount * rate,
-                                balanceId = balanceUI.id,
-                                commission = 1.0,
-                                currency = toRate.currency,
-                                rate = toRate.rates,
-                                dateCreated = LocalDate.now(),
-                                lastUpdated = LocalDate.now()
+                            listOf(
+                                Transaction(
+                                    id = 0,
+                                    type = Type.RECEIVE,
+                                    value = fromAmount * toRate.rates,
+                                    balanceId = balanceUI.id,
+                                    commission = 1.0,
+                                    currency = toRate.currency,
+                                    rate = toRate.rates,
+                                    dateCreated = LocalDate.now(),
+                                    lastUpdated = LocalDate.now()
+                                ),
+                                Transaction(
+                                    id = 0,
+                                    type = Type.SELL,
+                                    value = fromAmount,
+                                    balanceId = balanceUI.id,
+                                    commission = 1.0,
+                                    currency = fromRate.base,
+                                    rate = 1.0,
+                                    dateCreated = LocalDate.now(),
+                                    lastUpdated = LocalDate.now()
+                                )
                             )
                         )
                     )

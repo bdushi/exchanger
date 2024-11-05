@@ -1,8 +1,6 @@
 package al.bruno.exchanger.ui.exchange.ui
 
-import al.bruno.exchanger.common.core.formatToFourDecimals
-import al.bruno.exchanger.ui.exchange.model.ExchangeUI
-import al.bruno.exchanger.ui.exchange.model.TransactionUI
+import al.bruno.exchanger.common.core.formatToDecimals
 import al.bruno.exchanger.ui.exchange.model.TypeUI.RECEIVE
 import al.bruno.exchanger.ui.exchange.model.TypeUI.SELL
 import al.bruno.exchanger.ui.foundation.R
@@ -53,7 +51,7 @@ fun ExchangeScreen(
             Text(
                 text = stringResource(id = R.string.my_balances)
             )
-            when (exchange) {
+            when (val exchangeUI = exchange) {
                 is State.Error -> {
                     ErrorContentComponent(
                         errorMessages = stringResource(R.string.error_message),
@@ -67,17 +65,15 @@ fun ExchangeScreen(
                     LoadingContentComponent()
                 }
                 is State.Success -> {
-                    val exchangeUI: List<ExchangeUI> =
-                        (exchange as State.Success<List<ExchangeUI>>).data
                     LazyRow {
                         items(
-                            count = exchangeUI.size,
+                            count = exchangeUI.data.size,
                             itemContent = {
-                                val data = exchangeUI[it]
+                                val data = exchangeUI.data[it]
                                 Row(modifier = Modifier.padding(4.dp)) {
                                     Text(
                                         modifier = Modifier.padding(2.dp),
-                                        text = data.balance.formatToFourDecimals()
+                                        text = data.balance.formatToDecimals()
                                     )
                                     Text(
 
@@ -96,7 +92,7 @@ fun ExchangeScreen(
             Text(
                 text = stringResource(id = R.string.currency_exchanger)
             )
-            when (transaction) {
+            when (val transactionUI = transaction) {
                 is State.Error -> {
                     ErrorContentComponent(
                         errorMessages = stringResource(R.string.error_message),
@@ -111,14 +107,12 @@ fun ExchangeScreen(
                 }
 
                 is State.Success -> {
-                    val transactionUI: List<TransactionUI> =
-                        (transaction as State.Success<List<TransactionUI>>).data
                     LazyColumn {
                         items(
-                            count = transactionUI.size,
-                            key = { index: Int -> transactionUI[index].id },
+                            count = transactionUI.data.size,
+                            key = { index: Int -> transactionUI.data[index].id },
                             itemContent = {
-                                val data = transactionUI[it]
+                                val data = transactionUI.data[it]
                                 Card(
                                     shape = RoundedCornerShape(2.dp),
                                     modifier = Modifier.padding(2.dp),
@@ -172,7 +166,7 @@ fun ExchangeScreen(
                                             ) {
                                                 Text(
                                                     modifier = Modifier.padding(4.dp),
-                                                    text = data.value.formatToFourDecimals()
+                                                    text = data.value.formatToDecimals()
                                                 )
                                                 Text(
                                                     modifier = Modifier.padding(4.dp),

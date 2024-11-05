@@ -10,9 +10,6 @@ import org.koin.dsl.module
 
 /*
 INSERT INTO Balance (amount, currency, dateCreated, lastUpdated)
-VALUES (1000.0, 'EUR', '2024-10-30', '2024-10-30');
-
-INSERT INTO Balance (amount, currency, dateCreated, lastUpdated)
 VALUES (1000.0, 'EUR', DATE('now'), DATE('now'));
 */
 

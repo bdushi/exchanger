@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ConverterRepository {
     suspend fun insert(transaction: Transaction): Long
+    suspend fun insert(transactions: List<Transaction>): List<Long>
     suspend fun balance(): Balance
     fun transaction(): Flow<List<Transaction>>
 }

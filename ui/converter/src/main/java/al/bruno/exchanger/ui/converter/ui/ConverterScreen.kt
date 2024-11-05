@@ -1,6 +1,6 @@
 package al.bruno.exchanger.ui.converter.ui
 
-import al.bruno.exchanger.common.core.formatToFourDecimals
+import al.bruno.exchanger.common.core.formatToDecimals
 import al.bruno.exchanger.ui.foundation.R
 import al.bruno.exchanger.ui.foundation.arch.State
 import al.bruno.exchanger.ui.foundation.component.ErrorContentComponent
@@ -110,5 +110,5 @@ fun buildExchangeRateText(
     rate: Double? = 1.0
 ): String {
     if (baseCurrency == null || targetCurrency == null) return ""
-    return "1 $baseCurrency = ${rate?.formatToFourDecimals()} $targetCurrency"
+    return "1 $baseCurrency = ${rate?.formatToDecimals()} $targetCurrency"
 }

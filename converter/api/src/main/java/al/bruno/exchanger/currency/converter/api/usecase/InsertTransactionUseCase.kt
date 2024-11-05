@@ -3,5 +3,5 @@ package al.bruno.exchanger.currency.converter.api.usecase
 import al.bruno.exchanger.currency.converter.api.domain.Transaction
 
 interface InsertTransactionUseCase {
-    suspend operator fun invoke(transaction: Transaction) : Long
+    suspend operator fun invoke(transaction: List<Transaction>) : List<Long>
 }

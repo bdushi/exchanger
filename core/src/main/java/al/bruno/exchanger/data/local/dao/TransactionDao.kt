@@ -11,6 +11,9 @@ interface TransactionDao {
     @Insert
     suspend fun insert(transaction: Transaction): Long
 
+    @Insert
+    suspend fun insert(transactions: List<Transaction>): List<Long>
+
     @Query("SELECT * FROM `Transaction`")
     fun transaction(): Flow<List<Transaction>>
 }
