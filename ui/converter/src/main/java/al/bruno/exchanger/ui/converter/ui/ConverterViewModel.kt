@@ -6,81 +6,124 @@ import al.bruno.exchanger.currency.converter.api.domain.Type
 import al.bruno.exchanger.currency.converter.api.usecase.GetBalanceUseCase
 import al.bruno.exchanger.currency.converter.api.usecase.InsertTransactionUseCase
 import al.bruno.exchanger.exchange.api.usecase.GetExchangeRateUseCase
+import al.bruno.exchanger.ui.converter.ext.mapBalanceToUIModel
 import al.bruno.exchanger.ui.converter.ext.mapExchangeRateToUIModel
+import al.bruno.exchanger.ui.converter.model.BalanceUI
+import al.bruno.exchanger.ui.converter.model.ConversionState
+import al.bruno.exchanger.ui.converter.model.ExchangeRateUI
+import al.bruno.exchanger.ui.converter.model.RateUI
+import al.bruno.exchanger.ui.converter.model.calculateConvertedRate
+import al.bruno.exchanger.ui.converter.model.calculateInverseConvertedRate
 import al.bruno.exchanger.ui.foundation.arch.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class ConverterViewModel(
-    getExchangeRateUseCase: GetExchangeRateUseCase,
+    private val getExchangeRateUseCase: GetExchangeRateUseCase,
     private val insertTransactionUseCase: InsertTransactionUseCase,
     private val getBalanceUseCase: GetBalanceUseCase
     ): ViewModel() {
-    private val retryTrigger = MutableStateFlow(Unit)
 
-    val processIntent: (ConverterIntent) -> Unit = { intent ->
+
+    private val _uiState: MutableStateFlow<ConversionState> = MutableStateFlow(ConversionState())
+    val uiState: StateFlow<ConversionState> = _uiState.asStateFlow()
+
+    val processIntent: (Event) -> Unit = { intent ->
         when (intent) {
-            is ConverterIntent.GetExchangeRate -> {
-                onValueChange()
+            is Event.GetExchangeRate -> {
+                exchangeRate()
             }
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val exchangeRate =
-        retryTrigger.flatMapLatest {
-            getExchangeRateUseCase()
-                .map { exchangeRate ->
-                    when (exchangeRate) {
-                        is Result.Error -> State.Error(
-                            exchangeRate.error
-                        )
-
-                        is Result.Success -> State.Success(
-                            exchangeRate.data.map {
-                                it.mapExchangeRateToUIModel()
-                            }
-                        )
-                    }
-                }.stateIn(
-                    // basically convert the Flow returned from combine operator to StateFlow
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5000),//it will allow the StateFlow survive 5 seconds before it been canceled
-                    initialValue = State.Loading
-                )
-        }
-
-    private val onValueChange: () -> Unit = {
-        retryTrigger.value = Unit
+    init {
+        balance()
+        exchangeRate()
     }
 
-    fun insert() {
+    fun insert(balanceUI: BalanceUI) {
         viewModelScope.launch(Dispatchers.IO) {
-            insertTransactionUseCase(
-                Transaction(
-                    0,
-                    Type.SELL,
-                    900.0,
-                    1,
-                    1.0,
-                    "EUR",
-                    LocalDate.now(),
-                    LocalDate.now()
+            val toRate = _uiState.value.toRate ?: return@launch
+            val fromAmount = _uiState.value.fromValue.toDoubleOrNull() ?: return@launch
+            val fromRate = _uiState.value.fromRate ?: return@launch
+            val rate = fromRate.rates[toRate.currency] ?: return@launch
+            try {
+                _uiState.value = _uiState.value.copy(
+                    transactionUI = State.Success(
+                        insertTransactionUseCase(
+                            Transaction(
+                                id = 0,
+                                type = Type.SELL,
+                                value = fromAmount * rate,
+                                balanceId = balanceUI.id,
+                                commission = 1.0,
+                                currency = toRate.currency,
+                                dateCreated = LocalDate.now(),
+                                lastUpdated = LocalDate.now()
+                            )
+                        )
+                    )
                 )
-            )
+            } catch (ex: Exception) {
+                _uiState.value = _uiState.value.copy(transactionUI = State.Error("Error"))
+            }
         }
     }
 
-//    fun balance() = viewModelScope.launch {
-//        getBalanceUseCase()
-//    }
+    fun onFromValueChange(value: String) {
+        _uiState.value = _uiState.value.copy(
+            fromValue = value,
+            toValue = _uiState.value.toRate?.calculateConvertedRate(value) ?: ""
+        )
+    }
+
+    fun onToValueChange(value: String) {
+        _uiState.value = _uiState.value.copy(
+            toValue = value,
+            fromValue = _uiState.value.toRate?.calculateInverseConvertedRate(value) ?: ""
+        )
+    }
+
+    fun onFromCurrencySelected(selectedRate: ExchangeRateUI) {
+        _uiState.value = _uiState.value.copy(
+            fromRate = selectedRate,
+            availableRates = selectedRate.rates.map { RateUI(it.key, it.value) }
+        )
+    }
+
+    fun onToCurrencySelected(selectedRate: RateUI) {
+        _uiState.value = _uiState.value.copy(
+            toRate = selectedRate,
+            toValue = selectedRate.calculateConvertedRate(_uiState.value.fromValue)
+        )
+    }
+
+    private fun exchangeRate() =
+        viewModelScope.launch(Dispatchers.IO) {
+            getExchangeRateUseCase()
+                .collect { exchangeRate ->
+                    when (exchangeRate) {
+                        is Result.Error -> _uiState.value =
+                            _uiState.value.copy(exchangeRateUI = State.Error(exchangeRate.error))
+
+                        is Result.Success -> _uiState.value =
+                            _uiState.value.copy(exchangeRateUI = State.Success(exchangeRate.data.map { it.mapExchangeRateToUIModel() }))
+                    }
+                }
+        }
+
+    private fun balance() = viewModelScope.launch {
+        try {
+            _uiState.value =
+                _uiState.value.copy(balanceUI = State.Success(getBalanceUseCase().mapBalanceToUIModel()))
+        } catch (ex: Exception) {
+            _uiState.value = _uiState.value.copy(balanceUI = State.Error("Error"))
+        }
+    }
 }

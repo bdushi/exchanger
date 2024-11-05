@@ -1,9 +1,10 @@
-package al.bruno.exchanger.ui.foundation.widget
+package al.bruno.exchanger.ui.foundation.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -31,11 +32,14 @@ fun <T> CurrencySelectedMenu(
     onDoneActionClick: () -> Unit = {},
     label: String,
     placeholder: String,
-    rate: String
+    rate: String,
+    defaultText: String,
 ) {
     val view = LocalView.current
     Card {
         Column(
+            modifier = Modifier
+                .padding(4.dp),
             horizontalAlignment = Alignment.CenterHorizontally // Center content horizontally
         ) {
             Row(
@@ -46,9 +50,8 @@ fun <T> CurrencySelectedMenu(
                     label = label,
                     modifier = modifier.weight(1F),
                     items = items,
-                    onItemSelected = {
-                        onItemSelected.invoke(it)
-                    }
+                    defaultText = defaultText,
+                    onItemSelected = onItemSelected
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))

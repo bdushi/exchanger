@@ -1,4 +1,4 @@
-package al.bruno.exchanger.ui.foundation.widget
+package al.bruno.exchanger.ui.foundation.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,14 +29,19 @@ import androidx.compose.ui.unit.sp
 fun <T> ExposedDropdownMenu(
     modifier: Modifier,
     label: String,
+    defaultText: String,
     items: List<T>,
     onItemSelected: (T) -> Unit,
 ) {
     val (selectedItem, setSelectedItem) = remember { mutableStateOf(items.firstOrNull()) }
     val (expanded, setExpanded) = remember { mutableStateOf(false) }
+    LaunchedEffect(items) {
+        setSelectedItem(items.firstOrNull())
+    }
     selectedItem?.let {
         onItemSelected.invoke(it)
     }
+
     ExposedDropdownMenuBox(
         modifier = modifier,
         expanded = expanded,
@@ -48,7 +54,7 @@ fun <T> ExposedDropdownMenu(
             ) {
                 Text(
                     text = selectedItem?.toString()
-                        ?: "Select an item", // Default text if no item is selected
+                        ?: defaultText, // Default text if no item is selected
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     modifier = Modifier

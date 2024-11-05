@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.onStart
  * SateFlow Generic Response Class which
  * Represents different states for the screens
  */
-sealed class State<out T> : UiState {
+sealed class State<out T> {
     data object Loading : State<Nothing>()
     data class Success<out T>(val data: T): State<T>()
     data class Error(val error: String?): State<Nothing>()
