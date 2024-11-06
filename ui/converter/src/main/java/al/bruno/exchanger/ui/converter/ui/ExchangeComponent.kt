@@ -1,5 +1,6 @@
 package al.bruno.exchanger.ui.converter.ui
 
+import al.bruno.exchanger.common.core.buildExchangeRateText
 import al.bruno.exchanger.common.core.stringToDouble
 import al.bruno.exchanger.ui.converter.model.BalanceUI
 import al.bruno.exchanger.ui.converter.model.ConversionState

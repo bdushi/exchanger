@@ -12,5 +12,8 @@
     <string name="default_select_item">Select an Item</string>
     <string name="submit">Submit</string>
     <string name="out_of_balance">You’ve run out of balance</string>
+    <string name="confirm">Confirm</string>
+    <string name="currency_converted">Currency Converted</string>
+    <string name="currency_converted_messages">You have converted %.2f %s to %.2f %s. Commission fee %.2f %s.</string>
 </resources>
 
