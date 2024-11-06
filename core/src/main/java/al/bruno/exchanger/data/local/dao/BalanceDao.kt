@@ -6,7 +6,8 @@ import androidx.room.Query
 
 @Dao
 interface BalanceDao {
-    @Query("""
+    @Query(
+        """
         SELECT 
             b.id,
             COALESCE(SUM(b.amount), 0) - COALESCE(`transaction`.total_transaction, 0) AS amount,
@@ -18,10 +19,11 @@ interface BalanceDao {
         LEFT JOIN
             (SELECT balanceId, SUM(value) AS total_transaction
              FROM `Transaction`
-             WHERE type = 'SELL'
+             WHERE transactionType = 'SELL'
              GROUP BY balanceId) AS `transaction` ON b.id = `transaction`.balanceId
         GROUP BY
             b.currency
-    """)
+    """
+    )
     suspend fun balance() : Balance
 }

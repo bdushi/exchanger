@@ -15,5 +15,5 @@ val converterModule = module {
     single<GetBalanceUseCase> { GetBalanceUseCaseImpl(get()) }
     single<GetTransactionUseCase> { GetTransactionUseCaseImpl(get()) }
 
-    single<ConverterRepository> { ConverterRepositoryImpl(get(), get()) }
+    single<ConverterRepository> { ConverterRepositoryImpl(get(), get(), get()) }
 }

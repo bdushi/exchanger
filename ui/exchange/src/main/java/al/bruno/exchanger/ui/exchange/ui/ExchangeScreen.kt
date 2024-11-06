@@ -1,8 +1,8 @@
 package al.bruno.exchanger.ui.exchange.ui
 
 import al.bruno.exchanger.common.core.formatToDecimals
-import al.bruno.exchanger.ui.exchange.model.TypeUI.RECEIVE
-import al.bruno.exchanger.ui.exchange.model.TypeUI.SELL
+import al.bruno.exchanger.ui.exchange.model.TransactionTypeUI.RECEIVE
+import al.bruno.exchanger.ui.exchange.model.TransactionTypeUI.SELL
 import al.bruno.exchanger.ui.foundation.R
 import al.bruno.exchanger.ui.foundation.arch.State
 import al.bruno.exchanger.ui.foundation.component.ErrorContentComponent
@@ -25,7 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -134,7 +134,7 @@ fun ExchangeScreen(
                                                             .size(48.dp)
                                                             .padding(4.dp),
                                                         painter = painterResource(R.drawable.arrow_circle_up_24px),
-                                                        tint = Color.Red,
+                                                        tint = colorResource(R.color.sell),
                                                         contentDescription = "New Event Back Button"
                                                     )
                                                 }
@@ -145,7 +145,7 @@ fun ExchangeScreen(
                                                             .size(48.dp)
                                                             .padding(4.dp),
                                                         painter = painterResource(R.drawable.arrow_circle_down_24px),
-                                                        tint = Color.Green,
+                                                        tint = colorResource(R.color.receive),
                                                         contentDescription = "New Event Back Button"
                                                     )
                                                 }

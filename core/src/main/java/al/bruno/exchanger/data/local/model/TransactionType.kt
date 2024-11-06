@@ -1,6 +1,6 @@
 package al.bruno.exchanger.data.local.model
 
-enum class Type {
+enum class TransactionType {
     SELL,
     RECEIVE
 }

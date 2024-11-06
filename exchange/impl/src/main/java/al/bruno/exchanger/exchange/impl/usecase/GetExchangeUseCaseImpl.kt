@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 class GetExchangeUseCaseImpl(private val exchangeRepository: ExchangeRepository) :
     GetExchangeUseCase {
     override suspend fun invoke(): Flow<List<Exchange>> =
-        exchangeRepository.exchangeView()
+        exchangeRepository.exchange()
 }

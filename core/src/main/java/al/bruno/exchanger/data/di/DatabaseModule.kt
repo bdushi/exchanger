@@ -4,6 +4,7 @@ import al.bruno.exchanger.data.local.AppDatabase
 import al.bruno.exchanger.data.local.dao.BalanceDao
 import al.bruno.exchanger.data.local.dao.ExchangeDao
 import al.bruno.exchanger.data.local.dao.TransactionDao
+import al.bruno.exchanger.data.local.dao.ExchangeRuleDao
 import androidx.room.Room
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -11,6 +12,25 @@ import org.koin.dsl.module
 /*
 INSERT INTO Balance (amount, currency, dateCreated, lastUpdated)
 VALUES (1000.0, 'EUR', DATE('now'), DATE('now'));
+
+INSERT INTO ExchangeRule (description, condition, action, value, dateCreated, lastUpdated) VALUES
+    ("Standard commission rules", "transactionCount >= 5", "COMMISSION", 0.07, DATE('now'), DATE('now')),
+    ("Reward after specific conditions", "transactionCount >= 10", "REWARD", 0.01, DATE('now'), DATE('now')),
+    ("Discount on exchanges", "transactionCount >= 20", "DISCOUNT", 0.05, DATE('now'), DATE('now')),
+    ("Every tenth exchange is free", "transactionCount % 10 == 0", "FREE_EXCHANGE", 0.0, DATE('now'), DATE('now')),
+    ("Exchanges up to 200 Euros are free", "amount <= 200", "FREE_UP_TO_LIMIT", 0.0, DATE('now'), DATE('now'));
+
+INSERT INTO TransactionRule (condition, action) VALUES
+    ("transactionCount >= 5", "applyCommission"),
+    ("transactionCount >= 10", "applyReward"),
+    ("transactionCount >= 20", "applyDiscount");
+
+INSERT INTO Parameter (key, value, transactionRuleId) VALUES
+    ("rate", "0.007", 1),
+    ("rewardPercentage", "0.01", 2),
+    ("discountRate", "0.05", 3),
+    ("maxDiscount", "10.0", 3);
+
 */
 
 val databaseModule = module {
@@ -31,5 +51,8 @@ val databaseModule = module {
     }
     single<ExchangeDao> {
         get<AppDatabase>().exchangeDao()
+    }
+    single<ExchangeRuleDao> {
+        get<AppDatabase>().transactionRuleDao()
     }
 }

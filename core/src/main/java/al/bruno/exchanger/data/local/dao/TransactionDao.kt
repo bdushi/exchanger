@@ -1,6 +1,7 @@
 package al.bruno.exchanger.data.local.dao
 
 import al.bruno.exchanger.data.local.model.Transaction
+import al.bruno.exchanger.data.local.model.TransactionType
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -16,4 +17,7 @@ interface TransactionDao {
 
     @Query("SELECT * FROM `Transaction`")
     fun transaction(): Flow<List<Transaction>>
+
+    @Query("SELECT COUNT(*) FROM `Transaction` WHERE transactionType = :transactionType")
+    suspend fun getTransactionCount(transactionType: TransactionType): Int
 }

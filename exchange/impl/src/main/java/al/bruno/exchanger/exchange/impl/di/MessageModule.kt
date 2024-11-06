@@ -11,5 +11,5 @@ import org.koin.dsl.module
 val exchangeModule = module {
     single<GetExchangeRateUseCase> { GetExchangeRateUseCaseImpl(get()) }
     single<GetExchangeUseCase> { GetExchangeUseCaseImpl(get()) }
-    single<ExchangeRepository> { ExchangeRepositoryImpl(get(), get(), get(), get()) }
+    single<ExchangeRepository> { ExchangeRepositoryImpl(get(), get()) }
 }

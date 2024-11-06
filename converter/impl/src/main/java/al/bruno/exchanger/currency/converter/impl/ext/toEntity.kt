@@ -1,14 +1,13 @@
 package al.bruno.exchanger.currency.converter.impl.ext
 
-import al.bruno.exchanger.currency.converter.api.domain.Transaction
-import al.bruno.exchanger.currency.converter.api.domain.Type
 import al.bruno.exchanger.currency.converter.api.domain.Balance
-
+import al.bruno.exchanger.currency.converter.api.domain.Transaction
+import al.bruno.exchanger.currency.converter.api.domain.TransactionType
 
 fun Transaction.toTransactionEntity() = TransactionEntity(
     id = id,
     value = value,
-    type = type.toTypeEntity(),
+    transactionType = transactionType.toTypeEntity(),
     balanceId = balanceId,
     commission = commission,
     currency = currency,
@@ -17,7 +16,7 @@ fun Transaction.toTransactionEntity() = TransactionEntity(
     lastUpdated = lastUpdated
 )
 
-fun Type.toTypeEntity() = TypeEntity.valueOf(this.name)
+fun TransactionType.toTypeEntity() = TransactionTypeEntity.valueOf(this.name)
 
 fun Balance.toBalance() = BalanceEntity(
     id = id,

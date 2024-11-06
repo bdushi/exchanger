@@ -20,7 +20,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 
-@ExperimentalMaterial3Api
 @Composable
 fun NewExchangeScreen(
     modifier: Modifier = Modifier,

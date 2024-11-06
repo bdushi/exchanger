@@ -1,6 +1,6 @@
 package al.bruno.exchanger.ui.exchange.model
 
-enum class TypeUI {
+enum class TransactionTypeUI {
     SELL,
     RECEIVE
 }

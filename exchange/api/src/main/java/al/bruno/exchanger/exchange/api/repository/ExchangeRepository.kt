@@ -7,5 +7,4 @@ import kotlinx.coroutines.flow.Flow
 interface ExchangeRepository {
     suspend fun getMessages(): List<ExchangeRate>
     suspend fun exchange(): Flow<List<Exchange>>
-    suspend fun exchangeView(): Flow<List<Exchange>>
 }

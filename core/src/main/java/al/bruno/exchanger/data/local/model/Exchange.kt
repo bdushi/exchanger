@@ -3,7 +3,8 @@ package al.bruno.exchanger.data.local.model
 import androidx.room.ColumnInfo
 import androidx.room.DatabaseView
 
-@DatabaseView("""
+@DatabaseView(
+    """
     SELECT 
         b.currency AS currency,
         COALESCE(SUM(b.amount), 0) - COALESCE(`transaction`.total_transaction, 0) AS total_value,
@@ -13,7 +14,7 @@ import androidx.room.DatabaseView
     LEFT JOIN
         (SELECT balanceId, SUM(value) AS total_transaction
          FROM `Transaction`
-         WHERE type = 'SELL'
+         WHERE transactionType = 'SELL'
          GROUP BY balanceId) AS `transaction` ON b.id = `transaction`.balanceId
     GROUP BY
         b.currency
@@ -26,10 +27,11 @@ import androidx.room.DatabaseView
     FROM 
         `Transaction` t
     WHERE 
-        t.type = 'RECEIVE'
+        t.transactionType = 'RECEIVE'
     GROUP BY 
         t.currency;
-""")
+"""
+)
 data class Exchange(
     @ColumnInfo(name = "total_value")
     val totalValue: Double,

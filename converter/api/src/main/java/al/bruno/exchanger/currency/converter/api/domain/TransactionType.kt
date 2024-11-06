@@ -1,6 +1,6 @@
 package al.bruno.exchanger.currency.converter.api.domain
 
-enum class Type {
+enum class TransactionType {
     SELL,
     RECEIVE
 }

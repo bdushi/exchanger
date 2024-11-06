@@ -2,7 +2,7 @@ package al.bruno.exchanger.ui.converter.ui
 
 import al.bruno.exchanger.common.core.Result
 import al.bruno.exchanger.currency.converter.api.domain.Transaction
-import al.bruno.exchanger.currency.converter.api.domain.Type
+import al.bruno.exchanger.currency.converter.api.domain.TransactionType
 import al.bruno.exchanger.currency.converter.api.usecase.GetBalanceUseCase
 import al.bruno.exchanger.currency.converter.api.usecase.InsertTransactionUseCase
 import al.bruno.exchanger.exchange.api.usecase.GetExchangeRateUseCase
@@ -59,7 +59,7 @@ class ConverterViewModel(
                             listOf(
                                 Transaction(
                                     id = 0,
-                                    type = Type.RECEIVE,
+                                    transactionType = TransactionType.RECEIVE,
                                     value = fromAmount * toRate.rates,
                                     balanceId = balanceUI.id,
                                     commission = 1.0,
@@ -70,7 +70,7 @@ class ConverterViewModel(
                                 ),
                                 Transaction(
                                     id = 0,
-                                    type = Type.SELL,
+                                    transactionType = TransactionType.SELL,
                                     value = fromAmount,
                                     balanceId = balanceUI.id,
                                     commission = 1.0,
