@@ -31,7 +31,7 @@ fun TransactionItem(
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(4.dp)
     ) {
         Row(
             modifier = Modifier
@@ -52,7 +52,7 @@ fun TransactionItem(
                     ),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(32.dp)
+                        .size(36.dp)
                         .padding(4.dp),
                     tint = when (transaction.type) {
                         TransactionTypeUI.SELL -> colorResource(R.color.sell)
@@ -64,7 +64,6 @@ fun TransactionItem(
                     text = transaction.type.name,
                 )
             }
-
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {

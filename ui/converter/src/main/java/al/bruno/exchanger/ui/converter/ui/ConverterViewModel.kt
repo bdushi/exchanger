@@ -111,10 +111,9 @@ class ConverterViewModel(
                 }
         }
 
-    private fun balance() = viewModelScope.launch {
+    fun balance() = viewModelScope.launch {
         try {
-            _uiState.value =
-                _uiState.value.copy(balanceUI = State.Success(getBalanceUseCase().mapBalanceToUIModel()))
+            _uiState.value = _uiState.value.copy(balanceUI = State.Success(getBalanceUseCase().mapBalanceToUIModel()))
         } catch (ex: Exception) {
             _uiState.value = _uiState.value.copy(balanceUI = State.Error("Error"))
         }

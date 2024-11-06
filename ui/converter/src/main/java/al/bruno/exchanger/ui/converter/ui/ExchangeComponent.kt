@@ -11,11 +11,17 @@ import al.bruno.exchanger.ui.foundation.component.CurrencySelectedMenu
 import al.bruno.exchanger.ui.foundation.component.ErrorContentComponent
 import al.bruno.exchanger.ui.foundation.component.LoadingContentComponent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,8 +35,10 @@ fun ExchangeContent(
     onToValueChange: (String) -> Unit,
     onFromCurrencySelected: (ExchangeRateUI) -> Unit,
     onToCurrencySelected: (RateUI) -> Unit,
-    onSubmit: (balance: BalanceUI) -> Unit
+    onSubmit: (balance: BalanceUI) -> Unit,
+    onRetry: () -> Unit,
 ) {
+    val (isEnabled, setEnabled) = remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxWidth(),
@@ -49,7 +57,8 @@ fun ExchangeContent(
                 baseCurrency = uiState.fromRate?.base,
                 targetCurrency = uiState.toRate?.currency,
                 rate = uiState.toRate?.rates
-            )
+            ),
+            enabled = isEnabled
         )
 
         CurrencySelectedMenu(
@@ -65,34 +74,50 @@ fun ExchangeContent(
                 baseCurrency = uiState.toRate?.currency,
                 targetCurrency = uiState.fromRate?.base,
                 rate = if(uiState.toRate?.rates != null) 1 / uiState.toRate.rates else 1.0
-            )
+            ),
+            enabled = isEnabled
         )
         when(val balance = uiState.balanceUI) {
             is State.Error -> {
                 ErrorContentComponent(
                     errorMessages = stringResource(R.string.error_message),
                     errorButton = stringResource(R.string.retry),
-                    onRetry = {
-                        // TODO
-                    }
+                    onRetry = onRetry
                 )
             }
             is State.Loading -> {
                 LoadingContentComponent()
             }
             is State.Success -> {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    onClick = {
-                        onSubmit(balance.data)
-                    },
-                    enabled = balance.data.amount >= uiState.fromValue.stringToDouble(0.0) && uiState.toRate != null && uiState.toValue.isNotEmpty() && uiState.fromValue.isNotEmpty()
-                ) {
-                    Text(
-                        text = stringResource(R.string.submit),
-                        fontWeight = FontWeight.SemiBold
-                    )
+                if (balance.data.amount > 0) {
+                    setEnabled(false)
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        onClick = {
+                            onSubmit(balance.data)
+                        },
+                        enabled = balance.data.amount >= uiState.fromValue.stringToDouble(0.0) && uiState.toRate != null && uiState.toValue.isNotEmpty() && uiState.fromValue.isNotEmpty()
+                    ) {
+                        Text(
+                            text = stringResource(R.string.submit),
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                } else {
+                    setEnabled(true)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.out_of_balance),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.error,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
         }

@@ -11,5 +11,6 @@
     <string name="value_placeholder">Value</string>
     <string name="default_select_item">Select an Item</string>
     <string name="submit">Submit</string>
+    <string name="out_of_balance">You’ve run out of balance</string>
 </resources>
 

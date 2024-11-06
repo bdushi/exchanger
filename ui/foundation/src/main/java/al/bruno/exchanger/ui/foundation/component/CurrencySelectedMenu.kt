@@ -34,6 +34,7 @@ fun <T> CurrencySelectedMenu(
     placeholder: String,
     rate: String,
     defaultText: String,
+    enabled: Boolean
 ) {
     val view = LocalView.current
     Card {
@@ -80,7 +81,8 @@ fun <T> CurrencySelectedMenu(
                         keyboardOptions = KeyboardOptions(
                             imeAction = ImeAction.Done,
                             keyboardType = KeyboardType.Number,
-                        )
+                        ),
+                        readOnly = enabled
                     )
                     Text(
                         fontWeight = FontWeight.W200,

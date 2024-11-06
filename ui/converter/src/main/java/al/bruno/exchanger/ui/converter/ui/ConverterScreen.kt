@@ -8,7 +8,6 @@ import al.bruno.exchanger.ui.foundation.component.ExchangeTopBarWithBackButton
 import al.bruno.exchanger.ui.foundation.component.LoadingContentComponent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -41,9 +40,6 @@ fun NewExchangeScreen(
                 .padding(it)
                 .padding(8.dp)
         ) {
-            Column {
-
-            }
             when (val exchangeRateUIState = uiState.exchangeRateUI) {
                 is State.Error -> {
                     ErrorContentComponent(
@@ -75,6 +71,9 @@ fun NewExchangeScreen(
                         },
                         onSubmit = { balance ->
                             converterViewModel.insert(balance)
+                        },
+                        onRetry = {
+                            converterViewModel.balance()
                         }
                     )
                 }
