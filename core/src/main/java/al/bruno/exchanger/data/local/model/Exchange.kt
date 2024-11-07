@@ -7,12 +7,16 @@ import androidx.room.DatabaseView
     """
     SELECT 
         b.currency AS currency,
-        COALESCE(SUM(b.amount), 0) - COALESCE(`transaction`.total_transaction, 0) AS total_value,
+        COALESCE(SUM(b.amount), 0) - COALESCE(`transaction`.total_transaction, 0) + COALESCE(`transaction`.bonus, 0) - COALESCE(`transaction`.commission, 0) AS total_value,
         0 AS commission
     FROM 
         Balance b
     LEFT JOIN
-        (SELECT balanceId, SUM(value) AS total_transaction
+        (SELECT 
+             balanceId, 
+             SUM(value) AS total_transaction,
+             SUM(CASE WHEN commissionType = 'COMMISSION' THEN commission ELSE 0 END) AS commission, 
+             SUM(CASE WHEN commissionType = 'BONUS' THEN commission ELSE 0 END) AS bonus
          FROM `Transaction`
          WHERE transactionType = 'SELL'
          GROUP BY balanceId) AS `transaction` ON b.id = `transaction`.balanceId
