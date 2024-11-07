@@ -1,10 +1,9 @@
 package al.bruno.exchanger.ui.converter.ui
 
-import al.bruno.exchanger.currency.converter.api.domain.TransactionType
-import al.bruno.exchanger.ui.converter.model.CommissionUI
 import al.bruno.exchanger.ui.foundation.R
 import al.bruno.exchanger.ui.foundation.arch.State
 import al.bruno.exchanger.ui.foundation.component.ErrorContentComponent
+import al.bruno.exchanger.ui.foundation.component.ExchangeDialogComponent
 import al.bruno.exchanger.ui.foundation.component.ExchangeTopBarWithBackButton
 import al.bruno.exchanger.ui.foundation.component.LoadingContentComponent
 import al.bruno.exchanger.ui.foundation.theme.ExchangerTheme
@@ -94,8 +93,17 @@ fun NewExchangeScreen(
                         }
                     ) {
                         ExchangeDialogComponent(
-                            commission = transactions.data,
-                            base = uiState.fromRate?.base,
+                            title = stringResource(R.string.currency_converted),
+                            message = stringResource(R.string.currency_converted_messages)
+                                .format(
+                                    transactions.data.sellValue,
+                                    transactions.data.sellCurrency,
+                                    transactions.data.receiveValue,
+                                    transactions.data.receiveCurrency,
+                                    transactions.data.commission,
+                                    uiState.fromRate?.base
+                                ),
+                            buttonText = stringResource(R.string.confirm),
                             onClick = {
                                 openAlertDialogError.value = true
                                 navigateUp.invoke()

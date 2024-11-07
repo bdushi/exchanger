@@ -1,8 +1,5 @@
-package al.bruno.exchanger.ui.converter.ui
+package al.bruno.exchanger.ui.foundation.component
 
-import al.bruno.exchanger.currency.converter.api.domain.Transaction
-import al.bruno.exchanger.ui.converter.model.CommissionUI
-import al.bruno.exchanger.ui.foundation.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -14,7 +11,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,8 +19,9 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun ExchangeDialogComponent(
     onClick: () -> Unit,
-    commission: CommissionUI?,
-    base: String?
+    title: String,
+    message: String,
+    buttonText: String
 ) {
     Surface(
         modifier = Modifier
@@ -39,22 +36,14 @@ fun ExchangeDialogComponent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.currency_converted),
+                text = title,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 18.sp,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
             Text(
-                text = stringResource(R.string.currency_converted_messages)
-                    .format(
-                        commission?.sellValue,
-                        commission?.sellCurrency,
-                        commission?.receiveValue,
-                        commission?.receiveCurrency,
-                        commission?.commission,
-                        base
-                    ),
+                text = message,
                 fontWeight = FontWeight.Normal,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(bottom = 16.dp),
@@ -64,7 +53,7 @@ fun ExchangeDialogComponent(
                 onClick = onClick
             ) {
                 Text(
-                    text = stringResource(R.string.confirm),
+                    text = buttonText,
                     style = MaterialTheme.typography.labelLarge
                 )
             }
