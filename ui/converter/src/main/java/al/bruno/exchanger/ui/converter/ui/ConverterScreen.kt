@@ -1,6 +1,7 @@
 package al.bruno.exchanger.ui.converter.ui
 
 import al.bruno.exchanger.currency.converter.api.domain.TransactionType
+import al.bruno.exchanger.ui.converter.model.CommissionUI
 import al.bruno.exchanger.ui.foundation.R
 import al.bruno.exchanger.ui.foundation.arch.State
 import al.bruno.exchanger.ui.foundation.component.ErrorContentComponent
@@ -87,16 +88,13 @@ fun NewExchangeScreen(
 
             when (val transactions = uiState.transactionUI) {
                 is State.Success -> {
-                    val sell = transactions.data.find { transaction -> transaction.transactionType == TransactionType.SELL }
-                    val receive = transactions.data.find { transaction -> transaction.transactionType == TransactionType.RECEIVE }
                     BasicAlertDialog(
                         onDismissRequest = {
                             openAlertDialogError.value = false
                         }
                     ) {
                         ExchangeDialogComponent(
-                            sell = sell,
-                            receive = receive,
+                            commission = transactions.data,
                             base = uiState.fromRate?.base,
                             onClick = {
                                 openAlertDialogError.value = true

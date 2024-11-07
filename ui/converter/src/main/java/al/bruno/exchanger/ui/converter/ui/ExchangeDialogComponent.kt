@@ -1,6 +1,7 @@
 package al.bruno.exchanger.ui.converter.ui
 
 import al.bruno.exchanger.currency.converter.api.domain.Transaction
+import al.bruno.exchanger.ui.converter.model.CommissionUI
 import al.bruno.exchanger.ui.foundation.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -22,8 +23,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun ExchangeDialogComponent(
     onClick: () -> Unit,
-    sell: Transaction?,
-    receive: Transaction?,
+    commission: CommissionUI?,
     base: String?
 ) {
     Surface(
@@ -48,11 +48,11 @@ fun ExchangeDialogComponent(
             Text(
                 text = stringResource(R.string.currency_converted_messages)
                     .format(
-                        sell?.value,
-                        sell?.currency,
-                        receive?.value,
-                        receive?.currency,
-                        sell?.commission?.commission,
+                        commission?.sellValue,
+                        commission?.sellCurrency,
+                        commission?.receiveValue,
+                        commission?.receiveCurrency,
+                        commission?.commission,
                         base
                     ),
                 fontWeight = FontWeight.Normal,

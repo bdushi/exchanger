@@ -2,12 +2,14 @@ package al.bruno.exchanger.ui.converter.ui
 
 import al.bruno.exchanger.common.core.Result
 import al.bruno.exchanger.currency.converter.api.domain.NewTransaction
+import al.bruno.exchanger.currency.converter.api.domain.TransactionType
 import al.bruno.exchanger.currency.converter.api.usecase.GetBalanceUseCase
 import al.bruno.exchanger.currency.converter.api.usecase.InsertTransactionUseCase
 import al.bruno.exchanger.exchange.api.usecase.GetExchangeRateUseCase
 import al.bruno.exchanger.ui.converter.ext.mapBalanceToUIModel
 import al.bruno.exchanger.ui.converter.ext.mapExchangeRateToUIModel
 import al.bruno.exchanger.ui.converter.model.BalanceUI
+import al.bruno.exchanger.ui.converter.model.CommissionUI
 import al.bruno.exchanger.ui.converter.model.ConversionState
 import al.bruno.exchanger.ui.converter.model.ExchangeRateUI
 import al.bruno.exchanger.ui.converter.model.RateUI
@@ -68,9 +70,24 @@ class ConverterViewModel(
             ) {
                 is Result.Error -> _uiState.value =
                     _uiState.value.copy(transactionUI = State.Error(newTransaction.error))
-
-                is Result.Success -> _uiState.value =
-                    _uiState.value.copy(transactionUI = State.Success(newTransaction.data))
+                is Result.Success -> {
+                    val sell =
+                        newTransaction.data.find { transaction -> transaction.transactionType == TransactionType.SELL }
+                    val receive =
+                        newTransaction.data.find { transaction -> transaction.transactionType == TransactionType.RECEIVE }
+                    _uiState.value =
+                        _uiState.value.copy(
+                            transactionUI = State.Success(
+                                CommissionUI(
+                                    sellValue = sell?.value,
+                                    sellCurrency = sell?.currency,
+                                    receiveValue = receive?.value,
+                                    receiveCurrency = receive?.currency,
+                                    commission = sell?.commission?.commission,
+                                )
+                            )
+                        )
+                }
             }
         }
     }
