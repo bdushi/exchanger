@@ -1,5 +1,6 @@
 package al.bruno.exchanger.data.local.model
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -22,9 +23,10 @@ data class Transaction(
     val transactionType: TransactionType,
     val value: Double,
     val balanceId: Long,
-    val commission: Double,
     val rate: Double,
     val currency: String,
+    @Embedded
+    val commission: Commission,
     val dateCreated: LocalDate,
     val lastUpdated: LocalDate
 )

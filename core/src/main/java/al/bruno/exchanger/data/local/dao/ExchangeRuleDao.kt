@@ -6,6 +6,6 @@ import androidx.room.Query
 
 @Dao
 interface ExchangeRuleDao {
-    @Query("SELECT * FROM ExchangeRule")
-    suspend fun getExchangeRules(): List<ExchangeRule>
+    @Query("SELECT * FROM ExchangeRule WHERE enable = :enable")
+    suspend fun getExchangeRules(enable: Boolean = true): List<ExchangeRule>
 }

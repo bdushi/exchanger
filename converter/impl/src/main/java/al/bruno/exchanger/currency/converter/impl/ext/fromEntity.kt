@@ -1,6 +1,8 @@
 package al.bruno.exchanger.currency.converter.impl.ext
 
 import al.bruno.exchanger.currency.converter.api.domain.Balance
+import al.bruno.exchanger.currency.converter.api.domain.Commission
+import al.bruno.exchanger.currency.converter.api.domain.CommissionType
 import al.bruno.exchanger.currency.converter.api.domain.ExchangeRule
 import al.bruno.exchanger.currency.converter.api.domain.RuleType
 import al.bruno.exchanger.currency.converter.api.domain.Transaction
@@ -21,7 +23,7 @@ fun TransactionEntity.toTransaction() = Transaction(
     value = value,
     transactionType = transactionType.toType(),
     balanceId = balanceId,
-    commission = commission,
+    commission = commission.toCommission(),
     currency = currency,
     rate = rate,
     dateCreated = dateCreated,
@@ -39,5 +41,13 @@ fun ExchangeRuleEntity.toExchangeRuleEntity() = ExchangeRule(
     dateCreated = dateCreated,
     lastUpdated = lastUpdated
 )
+
+fun CommissionEntity.toCommission() = Commission(
+    commissionType = commissionType.toCommissionType(),
+    commission = commission,
+    commissionRate = commissionRate
+)
+
+fun CommissionTypeEntity.toCommissionType() = CommissionType.valueOf(this.name)
 
 fun RuleTypeEntity.toRuleType() = RuleType.valueOf(this.name)

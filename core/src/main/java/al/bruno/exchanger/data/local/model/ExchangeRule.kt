@@ -12,6 +12,7 @@ data class ExchangeRule(
     val condition: String, // Condition as a string (e.g., "transactionCount >= 5")
     val action: RuleType, // Enum to define the action to apply
     val value: Double, // Value for the key (e.g., 0.007, 200.0)
+    val enable: Boolean,
     val dateCreated: LocalDate,
     val lastUpdated: LocalDate
 )

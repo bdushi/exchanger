@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun ExchangeDialogComponent(
     onClick: () -> Unit,
-    sell: Transaction,
-    receive: Transaction,
+    sell: Transaction?,
+    receive: Transaction?,
     base: String?
 ) {
     Surface(
@@ -48,11 +48,11 @@ fun ExchangeDialogComponent(
             Text(
                 text = stringResource(R.string.currency_converted_messages)
                     .format(
-                        sell.value,
-                        sell.currency,
-                        receive.value,
-                        receive.currency,
-                        sell.commission,
+                        sell?.value,
+                        sell?.currency,
+                        receive?.value,
+                        receive?.currency,
+                        sell?.commission?.commission,
                         base
                     ),
                 fontWeight = FontWeight.Normal,

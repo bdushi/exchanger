@@ -1,11 +1,12 @@
 package al.bruno.exchanger.currency.converter.impl.usecase
 
+import al.bruno.exchanger.common.core.Result
+import al.bruno.exchanger.currency.converter.api.domain.Commission
+import al.bruno.exchanger.currency.converter.api.domain.NewTransaction
 import al.bruno.exchanger.currency.converter.api.domain.Transaction
+import al.bruno.exchanger.currency.converter.api.domain.TransactionType
 import al.bruno.exchanger.currency.converter.api.repository.ConverterRepository
 import al.bruno.exchanger.currency.converter.api.usecase.InsertTransactionUseCase
-import al.bruno.exchanger.common.core.Result
-import al.bruno.exchanger.currency.converter.api.domain.NewTransaction
-import al.bruno.exchanger.currency.converter.api.domain.TransactionType
 import java.time.LocalDate
 
 class InsertTransactionUseCaseImpl(private val converterRepository: ConverterRepository) :
@@ -18,9 +19,9 @@ class InsertTransactionUseCaseImpl(private val converterRepository: ConverterRep
                     transactionType = TransactionType.RECEIVE,
                     value = newTransaction.fromAmount * newTransaction.rates,
                     balanceId = newTransaction.balanceId,
-                    commission = 1.0,
                     currency = newTransaction.currency,
                     rate = newTransaction.rates,
+                    commission = Commission(),
                     dateCreated = LocalDate.now(),
                     lastUpdated = LocalDate.now()
                 ),
@@ -29,18 +30,14 @@ class InsertTransactionUseCaseImpl(private val converterRepository: ConverterRep
                     transactionType = TransactionType.SELL,
                     value = newTransaction.fromAmount,
                     balanceId = newTransaction.balanceId,
-                    commission = 1.0,
                     currency = newTransaction.base,
                     rate = 1.0,
+                    commission = Commission(),
                     dateCreated = LocalDate.now(),
                     lastUpdated = LocalDate.now()
                 )
             )
-            if(converterRepository.insert(transactions).isNotEmpty()) {
-                Result.Success(transactions)
-            } else {
-                Result.Error()
-            }
+            Result.Success(converterRepository.insert(transactions))
         } catch (ex: Exception) {
             Result.Error(ex.message)
         }

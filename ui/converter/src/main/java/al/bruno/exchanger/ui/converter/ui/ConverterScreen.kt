@@ -1,5 +1,6 @@
 package al.bruno.exchanger.ui.converter.ui
 
+import al.bruno.exchanger.currency.converter.api.domain.TransactionType
 import al.bruno.exchanger.ui.foundation.R
 import al.bruno.exchanger.ui.foundation.arch.State
 import al.bruno.exchanger.ui.foundation.component.ErrorContentComponent
@@ -85,23 +86,9 @@ fun NewExchangeScreen(
 
 
             when (val transactions = uiState.transactionUI) {
-                is State.Error -> {
-                    ErrorContentComponent(
-                        errorMessages = stringResource(R.string.error_message),
-                        errorButton = stringResource(R.string.retry),
-                        onRetry = {
-
-                        }
-                    )
-                }
-
-                is State.Loading -> {
-
-                }
-
                 is State.Success -> {
-                    val sell = transactions.data.first()
-                    val receive = transactions.data.last()
+                    val sell = transactions.data.find { transaction -> transaction.transactionType == TransactionType.SELL }
+                    val receive = transactions.data.find { transaction -> transaction.transactionType == TransactionType.RECEIVE }
                     BasicAlertDialog(
                         onDismissRequest = {
                             openAlertDialogError.value = false
@@ -117,6 +104,20 @@ fun NewExchangeScreen(
                             }
                         )
                     }
+                }
+
+                is State.Loading -> {
+
+                }
+
+                is State.Error -> {
+                    ErrorContentComponent(
+                        errorMessages = stringResource(R.string.error_message),
+                        errorButton = stringResource(R.string.start_new_exchanger),
+                        onRetry = {
+                            converterViewModel.processIntent(Event.ClearUIState)
+                        }
+                    )
                 }
             }
         }

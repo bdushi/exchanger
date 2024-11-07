@@ -3,8 +3,11 @@
     <string name="my_balances">My balances</string>
     <string name="currency_exchanger">Currency Exchanger</string>
     <string name="back_button_description">Navigate back</string>
-    <string name="error_message">An error occurred. Please try again.</string>
+    <string name="error_message">An error occurred. Please try again.</string>x
+    <string name="error_transaction_message">An error occurred, while getting your currency balance.</string>
+    <string name="error_exchange_message">An error occurred, while getting your currency exchanger.</string>
     <string name="retry">Retry</string>
+    <string name="start_new_exchanger">Start New Exchanger</string>
     <string name="loading">Loading…</string>
     <string name="from_label">From</string>
     <string name="to_label">To</string>

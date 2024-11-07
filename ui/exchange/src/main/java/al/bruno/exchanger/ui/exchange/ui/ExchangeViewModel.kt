@@ -5,15 +5,13 @@ import al.bruno.exchanger.exchange.api.usecase.GetExchangeUseCase
 import al.bruno.exchanger.ui.exchange.ext.mapExchangeToUIModel
 import al.bruno.exchanger.ui.exchange.ext.mapTransactionUIModel
 import al.bruno.exchanger.ui.exchange.model.ExchangeUI
+import al.bruno.exchanger.ui.exchange.model.TransactionUI
 import al.bruno.exchanger.ui.foundation.arch.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ExchangeViewModel(
@@ -22,9 +20,13 @@ class ExchangeViewModel(
 ) : ViewModel() {
     // Private mutable StateFlow for Exchange states, initially set to Loading
     private val _exchange = MutableStateFlow<State<List<ExchangeUI>>>(State.Loading)
-
     // Publicly exposed StateFlow that provides read-only access to _exchange
     val exchange: StateFlow<State<List<ExchangeUI>>> get() = _exchange
+
+    // Private mutable StateFlow for Exchange states, initially set to Loading
+    private val _transaction = MutableStateFlow<State<List<TransactionUI>>>(State.Loading)
+    // Publicly exposed StateFlow that provides read-only access to _transaction
+    val transaction: StateFlow<State<List<TransactionUI>>> get() = _transaction
 
     val processIntent: (Event) -> Unit = { intent ->
         when (intent) {
@@ -33,7 +35,7 @@ class ExchangeViewModel(
             }
 
             Event.Transaction -> {
-
+                transaction()
             }
         }
     }
@@ -41,27 +43,28 @@ class ExchangeViewModel(
     private fun exchanges() {
         viewModelScope.launch {
             getExchangeUseCase()
-                .catch { e ->
-                    _exchange.value = State.Error(e.message ?: "Unknown error")
+                .catch {
+                    _exchange.value = State.Error(it.message)
                 }
-                .collect { data ->
+                .collect { exchange ->
                     _exchange.value = State.Success(
-                        data.map { it.mapExchangeToUIModel() }
+                        exchange.map { it.mapExchangeToUIModel() }
                     )
                 }
         }
     }
 
-    val transaction =
-        getTransactionUseCase()
-            .catch {
-                State.Error(it.message)
-            }
-            .map { transaction ->
-                State.Success(transaction.map { it.mapTransactionUIModel() })
-        }.stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5000),
-                initialValue = State.Loading
-        )
+    private fun transaction() {
+        viewModelScope.launch {
+            getTransactionUseCase()
+                .catch {
+                    _transaction.value = State.Error(it.message)
+                }
+                .collect { transaction ->
+                    _transaction.value = State.Success(
+                        transaction.map { it.mapTransactionUIModel() }
+                    )
+                }
+        }
+    }
 }

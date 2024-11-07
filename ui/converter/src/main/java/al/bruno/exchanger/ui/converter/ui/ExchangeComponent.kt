@@ -10,19 +10,17 @@ import al.bruno.exchanger.ui.foundation.R
 import al.bruno.exchanger.ui.foundation.arch.State
 import al.bruno.exchanger.ui.foundation.component.CurrencySelectedMenu
 import al.bruno.exchanger.ui.foundation.component.ErrorContentComponent
+import al.bruno.exchanger.ui.foundation.component.ErrorMessageComponent
 import al.bruno.exchanger.ui.foundation.component.LoadingContentComponent
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -107,18 +105,10 @@ fun ExchangeContent(
                     }
                 } else {
                     setEnabled(true)
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.out_of_balance),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.error,
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
+                    ErrorMessageComponent(
+                        modifier = Modifier.fillMaxSize(),
+                        text = stringResource(R.string.out_of_balance)
+                    )
                 }
             }
         }

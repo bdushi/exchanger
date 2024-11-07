@@ -17,9 +17,10 @@ fun ExchangeScreen(
     exchangeViewModel: ExchangeViewModel = koinViewModel()
 ) {
     exchangeViewModel.processIntent(Event.Exchange)
+    exchangeViewModel.processIntent(Event.Transaction)
 
-    val transaction by exchangeViewModel.transaction.collectAsState()
     val exchange by exchangeViewModel.exchange.collectAsState()
+    val transaction by exchangeViewModel.transaction.collectAsState()
 
     Column(
         modifier = modifier

@@ -36,6 +36,12 @@ class ConverterViewModel(
             is Event.GetExchangeRate -> {
                 exchangeRate()
             }
+
+            Event.ClearUIState -> {
+                _uiState.value = ConversionState()
+                balance()
+                exchangeRate()
+            }
         }
     }
 
@@ -104,7 +110,6 @@ class ConverterViewModel(
                     when (exchangeRate) {
                         is Result.Error -> _uiState.value =
                             _uiState.value.copy(exchangeRateUI = State.Error(exchangeRate.error))
-
                         is Result.Success -> _uiState.value =
                             _uiState.value.copy(exchangeRateUI = State.Success(exchangeRate.data.map { it.mapExchangeRateToUIModel() }))
                     }
