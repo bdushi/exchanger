@@ -1,3 +1,70 @@
+# Currency Exchanger App
+
+## Overview
+
+This is a Currency Exchanger application built in Kotlin for Android. The app is designed following **Clean Architecture** principles with modularization. It utilizes **Ktor** for networking, **Koin** for Dependency Injection, **Android Rome** for local database management, and **Jetpack Compose** for the UI. **Unit Testing** has been implemented for the UseCase layer using **MockK** to ensure business logic accuracy.
+
+## Technologies Used
+
+- **Kotlin**: Primary programming language.
+- **Jetpack Compose**: For building the UI.
+- **Koin**: For Dependency Injection.
+- **Ktor**: For handling network requests to fetch currency exchange rates.
+- **Android Rome**: For managing local storage of user data and balances.
+- **MockK**: For mocking dependencies in unit tests.
+- **Clean Architecture**: Used to structure the project with clear separation between layers and modules.
+- **Unit Testing**: Unit tests are implemented to ensure that the UseCase logic works as expected.
+
+## Project Structure
+
+The project is organized into several modules, each responsible for a specific part of the application. The following modules are included:
+
+- **:app**: The main application module that ties everything together.
+- **:core**: Core functionality shared across the app.
+- **:exchange:impl**: Implementation of the currency exchange functionality.
+- **:exchange:api**: API layer for fetching exchange rates from the network.
+- **:converter:impl**: Implementation of the currency conversion logic.
+- **:converter:api**: API interface for conversion logic.
+- **:common:core**: Common utilities and base classes.
+- **:ui:exchange**: UI layer for the exchange screen.
+- **:ui:foundation**: Basic UI components and foundation code.
+- **:ui:converter**: UI layer for the currency conversion screen.
+
+## How to Run
+
+In order to connect to the API, you'll need to specify the host in the `local.properties` file. Add the following line to your `local.properties` file:
+
+   ```properties
+   HOST = developers.paysera.com
+   ```
+
+## Unit Testing
+
+Unit tests have been implemented for the **UseCase** layer, which handles the core business logic of currency conversion and balance management. The tests use **MockK** to mock dependencies and ensure the UseCase works as expected.
+
+To run the unit tests, use the following command in Android Studio:
+
+- Go to **Run > Run Tests**.
+- Select the test configuration for your UseCase tests.
+
+## Architecture
+
+### Clean Architecture
+
+The app follows **Clean Architecture** with the following layers:
+
+- **Presentation Layer**: Contains the UI components using **Compose** that interact with the ViewModel.
+- **Domain Layer**: Contains the UseCase, which holds the business logic for currency conversion, balance management, and commission calculation.
+- **Data Layer**: Handles API interactions (via Ktor) to fetch currency exchange rates and persists the data in a local database (using Android Rome).
+- **Dependency Injection**: **Koin** is used to manage dependencies across the app, ensuring the app's modules remain loosely coupled and maintainable.
+
+### Modularization
+
+The project is split into multiple modules for better maintainability and scalability. Each module is designed to have a single responsibility and can be easily extended in the future.
+
+## Future Improvements
+
+- **Adding ViewModel Testing**: In addition to UseCase testing, ViewModel testing can be implemented to ensure that UI-related logic, such as managing state and handling user input, works as expected. This will improve test coverage and ensure that the ViewModel interacts correctly with the UseCase layer.
 
 # Exchange Rules Engine
 
