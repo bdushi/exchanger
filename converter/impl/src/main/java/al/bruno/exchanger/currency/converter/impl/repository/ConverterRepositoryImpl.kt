@@ -22,10 +22,10 @@ class ConverterRepositoryImpl(
     private val balanceLocalDataSource: BalanceLocalDataSource,
     private val transactionRuleLocalDataSource: TransactionRuleLocalDataSource
 ) : ConverterRepository {
-    override suspend fun insert(transaction: Transaction): Long =
+    override suspend fun insertTransaction(transaction: Transaction): Long =
         transactionLocalDataSource.insert(transaction.toTransactionEntity())
 
-    override suspend fun insert(transactions: List<Transaction>): List<Transaction> {
+    override suspend fun insertTransactions(transactions: List<Transaction>): List<Transaction> {
         // val insertTransaction = transaction.toTransactionEntity()
         val transactionCount =
             transactionLocalDataSource.getTransactionCount(TransactionType.SELL.toTypeEntity())

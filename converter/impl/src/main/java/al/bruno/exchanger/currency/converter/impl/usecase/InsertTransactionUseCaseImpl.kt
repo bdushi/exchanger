@@ -37,7 +37,7 @@ class InsertTransactionUseCaseImpl(private val converterRepository: ConverterRep
                     lastUpdated = LocalDate.now()
                 )
             )
-            Result.Success(converterRepository.insert(transactions))
+            Result.Success(converterRepository.insertTransactions(transactions))
         } catch (ex: Exception) {
             Result.Error(ex.message)
         }

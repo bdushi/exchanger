@@ -5,6 +5,6 @@ import al.bruno.exchanger.exchange.api.domain.ExchangeRate
 import kotlinx.coroutines.flow.Flow
 
 interface ExchangeRepository {
-    suspend fun getMessages(): List<ExchangeRate>
+    suspend fun getExchangeRate(): List<ExchangeRate>
     suspend fun exchange(): Flow<List<Exchange>>
 }

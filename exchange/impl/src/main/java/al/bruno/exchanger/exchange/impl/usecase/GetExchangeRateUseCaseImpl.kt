@@ -14,7 +14,7 @@ class GetExchangeRateUseCaseImpl(private val exchangeRepository: ExchangeReposit
     GetExchangeRateUseCase {
     override operator fun invoke(): Flow<Result<List<ExchangeRate>>> = flow<Result<List<ExchangeRate>>> {
         while (true) {
-            emit(Result.Success(exchangeRepository.getMessages()))
+            emit(Result.Success(exchangeRepository.getExchangeRate()))
             delay(EXCHANGE_DELAY_REQUEST)
         }
     }.catch { exception ->

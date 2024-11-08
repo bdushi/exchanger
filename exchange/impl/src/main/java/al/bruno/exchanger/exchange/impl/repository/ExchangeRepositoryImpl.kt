@@ -14,7 +14,7 @@ class ExchangeRepositoryImpl(
     private val exchangeNetworkDataSource: ExchangeNetworkDataSource,
     private val exchangeLocalDataSource: ExchangeLocalDataSource,
 ) : ExchangeRepository {
-    override suspend fun getMessages(): List<ExchangeRate> =
+    override suspend fun getExchangeRate(): List<ExchangeRate> =
         exchangeNetworkDataSource
             .getExchangeRate()
             .map(ExchangeRateResponse::toExchange)
