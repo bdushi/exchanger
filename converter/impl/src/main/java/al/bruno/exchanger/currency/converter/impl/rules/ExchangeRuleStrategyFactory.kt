@@ -19,7 +19,7 @@ class ExchangeRuleStrategyFactory {
                 transactionCount % 10 == 0
             }
             RuleType.FREE_UP_TO_LIMIT -> ConditionalExchangeRuleStrategy(FreeUpToLimitRule()) {
-                it.value <= 200
+                it.value >= 200
             }
         }
     }
