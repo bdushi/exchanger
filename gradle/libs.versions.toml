@@ -41,6 +41,7 @@ koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin"}
 koin-android = { group = "io.insert-koin", name = "koin-android"}
 koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose"}
 koin-test = { group = "io.insert-koin", name = "koin-test"}
+koin-test-junit4 = { group = "io.insert-koin", name = "koin-test-junit4"}
 
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor"}
