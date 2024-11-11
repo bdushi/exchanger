@@ -21,7 +21,6 @@ class InsertTransactionUseCaseImpl(private val converterRepository: ConverterRep
                     balanceId = newTransaction.balanceId,
                     currency = newTransaction.currency,
                     rate = newTransaction.rates,
-                    commission = Commission(),
                     dateCreated = LocalDate.now(),
                     lastUpdated = LocalDate.now()
                 ),
@@ -32,7 +31,6 @@ class InsertTransactionUseCaseImpl(private val converterRepository: ConverterRep
                     balanceId = newTransaction.balanceId,
                     currency = newTransaction.base,
                     rate = 1.0,
-                    commission = Commission(),
                     dateCreated = LocalDate.now(),
                     lastUpdated = LocalDate.now()
                 )

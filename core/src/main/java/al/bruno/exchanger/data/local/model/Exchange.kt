@@ -7,16 +7,13 @@ import androidx.room.DatabaseView
     """
     SELECT 
         b.currency AS currency,
-        COALESCE(SUM(b.amount), 0) - COALESCE(`transaction`.total_transaction, 0) + COALESCE(`transaction`.bonus, 0) - COALESCE(`transaction`.commission, 0) AS total_value,
-        0 AS commission
+        COALESCE(SUM(b.amount), 0) - COALESCE(`transaction`.`transaction`, 0) AS balance
     FROM 
         Balance b
     LEFT JOIN
         (SELECT 
              balanceId, 
-             SUM(value) AS total_transaction,
-             SUM(CASE WHEN commissionType = 'COMMISSION' THEN commission ELSE 0 END) AS commission, 
-             SUM(CASE WHEN commissionType = 'BONUS' THEN commission ELSE 0 END) AS bonus
+             SUM(`transaction`) AS `transaction`
          FROM `Transaction`
          WHERE transactionType = 'SELL'
          GROUP BY balanceId) AS `transaction` ON b.id = `transaction`.balanceId
@@ -26,8 +23,7 @@ import androidx.room.DatabaseView
 -- Second part: Get balances for currencies present only in the Transaction table
     SELECT 
         t.currency AS currency,
-        SUM(t.value) AS total_value,
-        0 AS commission
+        SUM(t.`transaction`) AS balance
     FROM 
         `Transaction` t
     WHERE 
@@ -37,9 +33,7 @@ import androidx.room.DatabaseView
 """
 )
 data class Exchange(
-    @ColumnInfo(name = "total_value")
-    val totalValue: Double,
-    val currency: String,
-    val commission: Double,
+    val balance: Double,
+    val currency: String
 )
 

@@ -7,57 +7,56 @@ import al.bruno.exchanger.currency.converter.api.domain.Transaction
 import al.bruno.exchanger.currency.converter.api.rules.ExchangeRuleStrategy
 
 class CommissionRule : ExchangeRuleStrategy {
-    override fun applyRule(transaction: Transaction, rule: ExchangeRule): Transaction {
-        return transaction.copy(
-            commission = Commission(
-                commission = transaction.value * rule.value,
-                commissionType = CommissionType.COMMISSION,
-                commissionRate = rule.value
-            )
+    override fun applyRule(transaction: Transaction, rule: ExchangeRule) =
+        Commission(
+            transactionId = transaction.id,
+            type = CommissionType.COMMISSION,
+            fee = transaction.value * rule.rate,
+            rate = rule.rate,
+            base = transaction.currency
         )
-    }
 }
 
 class RewardRule : ExchangeRuleStrategy {
-    override fun applyRule(transaction: Transaction, rule: ExchangeRule): Transaction {
-        return transaction.copy(
-            commission = Commission(
-                commission = transaction.value * rule.value,
-                commissionType = CommissionType.BONUS,
-                commissionRate = rule.value
-            )
+    override fun applyRule(transaction: Transaction, rule: ExchangeRule) =
+        Commission(
+            transactionId = transaction.id,
+            type = CommissionType.BONUS,
+            fee = transaction.value * rule.rate,
+            rate = rule.rate,
+            base = transaction.currency
         )
-    }
 }
 
 class DiscountRule : ExchangeRuleStrategy {
-    override fun applyRule(transaction: Transaction, rule: ExchangeRule): Transaction {
-        return transaction.copy(
-            commission = Commission(
-                commission = transaction.value * rule.value,
-                commissionType = CommissionType.COMMISSION,
-                commissionRate = rule.value
-            )
+    override fun applyRule(transaction: Transaction, rule: ExchangeRule) =
+        Commission(
+            transactionId = transaction.id,
+            type = CommissionType.COMMISSION,
+            fee = transaction.value * rule.rate,
+            rate = rule.rate,
+            base = transaction.currency
         )
-    }
 }
 
 class FreeExchangeRule : ExchangeRuleStrategy {
-    override fun applyRule(transaction: Transaction, rule: ExchangeRule): Transaction {
-        return transaction.copy(
-            commission = Commission(
-                commission = 0.0, commissionType = CommissionType.FREE, commissionRate = 0.0
-            )
+    override fun applyRule(transaction: Transaction, rule: ExchangeRule) =
+        Commission(
+            transactionId = transaction.id,
+            type = CommissionType.FREE,
+            fee = 0.0,
+            rate = 0.0,
+            base = transaction.currency
         )
-    }
 }
 
 class FreeUpToLimitRule : ExchangeRuleStrategy {
-    override fun applyRule(transaction: Transaction, rule: ExchangeRule): Transaction {
-        return transaction.copy(
-            commission = Commission(
-                commission = 0.0, commissionType = CommissionType.FREE, commissionRate = 0.0
-            )
+    override fun applyRule(transaction: Transaction, rule: ExchangeRule) =
+        Commission(
+            transactionId = transaction.id,
+            type = CommissionType.FREE,
+            fee = 0.0,
+            rate = 0.0,
+            base = transaction.currency
         )
-    }
 }

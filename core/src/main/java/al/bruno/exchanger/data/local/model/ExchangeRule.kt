@@ -8,6 +8,7 @@ import java.time.LocalDate
 data class ExchangeRule(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
+    val priority: Int,
     val description: String,
     val condition: String, // Condition as a string (e.g., "transactionCount >= 5")
     val action: RuleType, // Enum to define the action to apply

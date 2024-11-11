@@ -13,6 +13,5 @@ fun ExchangeRateResponse.toExchange() = ExchangeRate(
 fun ExchangeEntity.toExchange() =
     Exchange(
         currency = currency,
-        balance = totalValue,
-        commission = commission,
+        balance = balance,
     )

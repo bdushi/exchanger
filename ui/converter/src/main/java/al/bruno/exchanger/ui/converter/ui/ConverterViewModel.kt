@@ -83,7 +83,7 @@ class ConverterViewModel(
                                     sellCurrency = sell?.currency,
                                     receiveValue = receive?.value,
                                     receiveCurrency = receive?.currency,
-                                    commission = sell?.commission?.commission,
+                                    commission = 0.0//sell?.commission?.commission,
                                 )
                             )
                         )

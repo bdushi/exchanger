@@ -4,6 +4,5 @@ data class TransactionUI(
     val id: Long,
     val type: TransactionTypeUI,
     val value: Double,
-    val commission: CommissionUI,
     val currency: String,
 )

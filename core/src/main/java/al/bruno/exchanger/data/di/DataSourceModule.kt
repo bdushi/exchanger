@@ -1,10 +1,12 @@
 package al.bruno.exchanger.data.di
 
 import al.bruno.exchanger.data.BalanceDataSource
+import al.bruno.exchanger.data.CommissionDataSource
 import al.bruno.exchanger.data.ExchangeDataSource
 import al.bruno.exchanger.data.TransactionDataSource
 import al.bruno.exchanger.data.TransactionRuleDataSource
 import al.bruno.exchanger.data.local.BalanceLocalDataSource
+import al.bruno.exchanger.data.local.CommissionLocalDataSource
 import al.bruno.exchanger.data.local.ExchangeLocalDataSource
 import al.bruno.exchanger.data.local.TransactionLocalDataSource
 import al.bruno.exchanger.data.local.TransactionRuleLocalDataSource
@@ -30,5 +32,9 @@ val dataSourceModule = module {
 
     single<TransactionRuleLocalDataSource> {
         TransactionRuleDataSource(get())
+    }
+
+    single<CommissionLocalDataSource> {
+        CommissionDataSource(get())
     }
 }

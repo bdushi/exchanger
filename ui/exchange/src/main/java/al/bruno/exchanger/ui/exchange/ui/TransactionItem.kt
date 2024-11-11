@@ -84,20 +84,21 @@ fun TransactionItem(
                 }
                 Text(
                     modifier = Modifier.align(Alignment.End),
-                    text = when (transaction.commission.commissionType) {
-                        CommissionTypeUI.COMMISSION ->
-                            stringResource(R.string.commission).format(
-                            transaction.commission.commission,
-                            transaction.currency
-                        )
-
-                        CommissionTypeUI.BONUS -> stringResource(R.string.bonus).format(
-                            transaction.commission.commission,
-                            transaction.currency
-                        )
-
-                        CommissionTypeUI.FREE -> stringResource(R.string.free_of_commission)
-                    },
+                    text = "",
+//                    text = when (transaction.commission.commissionType) {
+//                        CommissionTypeUI.COMMISSION ->
+//                            stringResource(R.string.commission).format(
+//                            transaction.commission.commission,
+//                            transaction.currency
+//                        )
+//
+//                        CommissionTypeUI.BONUS -> stringResource(R.string.bonus).format(
+//                            transaction.commission.commission,
+//                            transaction.currency
+//                        )
+//
+//                        CommissionTypeUI.FREE -> stringResource(R.string.free_of_commission)
+//                    },
                     fontWeight = FontWeight.W200,
                     fontSize = 12.sp,
                 )

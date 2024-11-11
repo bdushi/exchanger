@@ -4,7 +4,9 @@ import al.bruno.exchanger.currency.converter.api.domain.Balance
 import al.bruno.exchanger.currency.converter.api.domain.Transaction
 import al.bruno.exchanger.currency.converter.api.domain.TransactionType
 import al.bruno.exchanger.currency.converter.api.repository.ConverterRepository
+import al.bruno.exchanger.currency.converter.impl.decorator.ExchangeRuleFactory
 import al.bruno.exchanger.currency.converter.impl.ext.toBalance
+import al.bruno.exchanger.currency.converter.impl.ext.toCommissionEntity
 import al.bruno.exchanger.currency.converter.impl.ext.toExchangeRuleEntity
 import al.bruno.exchanger.currency.converter.impl.ext.toRuleType
 import al.bruno.exchanger.currency.converter.impl.ext.toTransaction
@@ -12,14 +14,18 @@ import al.bruno.exchanger.currency.converter.impl.ext.toTransactionEntity
 import al.bruno.exchanger.currency.converter.impl.ext.toTypeEntity
 import al.bruno.exchanger.currency.converter.impl.rules.ExchangeRuleStrategyFactory
 import al.bruno.exchanger.data.local.BalanceLocalDataSource
+import al.bruno.exchanger.data.local.CommissionLocalDataSource
 import al.bruno.exchanger.data.local.TransactionLocalDataSource
 import al.bruno.exchanger.data.local.TransactionRuleLocalDataSource
+import al.bruno.exchanger.data.local.model.ExchangeRule
+import al.bruno.exchanger.data.local.model.RuleType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class ConverterRepositoryImpl(
     private val transactionLocalDataSource: TransactionLocalDataSource,
     private val balanceLocalDataSource: BalanceLocalDataSource,
+    private val commissionLocalDataSource: CommissionLocalDataSource,
     private val transactionRuleLocalDataSource: TransactionRuleLocalDataSource
 ) : ConverterRepository {
     override suspend fun insertTransaction(transaction: Transaction): Long =
@@ -33,23 +39,35 @@ class ConverterRepositoryImpl(
         val exchangeRules = transactionRuleLocalDataSource.getExchangeRules()
         // Initialize the rule strategy factory
         val strategyFactory = ExchangeRuleStrategyFactory()
+
+        val exchangeRuleFactory = ExchangeRuleFactory()
+
+        val apply = exchangeRuleFactory.createCompositeRule(
+            *exchangeRules.map {
+                Pair(it.action.toRuleType(), it.value)
+            }.toTypedArray()
+        ) { transactionCount }
+
         return transactions.map { transaction ->
             when (transaction.transactionType) {
                 TransactionType.SELL -> {
+                    val id = transactionLocalDataSource.insert(transaction.toTransactionEntity())
                     val appliedCommission = exchangeRules.map {
                         strategyFactory
                             .getRuleStrategy(
                                 transactionCount = transactionCount,
                                 action = it.action.toRuleType()
                             ).applyRule(
-                                transaction,
+                                transaction.copy(id = id),
                                 it.toExchangeRuleEntity()
                             )
-                    }.last()
-                    transactionLocalDataSource.insert(
-                        appliedCommission.toTransactionEntity()
+                    }
+                    commissionLocalDataSource.insert(
+                        appliedCommission.mapNotNull {
+                            it?.toCommissionEntity()
+                        }
                     )
-                    appliedCommission
+                    transaction
                 }
 
                 TransactionType.RECEIVE -> {

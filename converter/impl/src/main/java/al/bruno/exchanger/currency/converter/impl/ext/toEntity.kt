@@ -7,10 +7,9 @@ import al.bruno.exchanger.currency.converter.api.domain.TransactionType
 
 fun Transaction.toTransactionEntity() = TransactionEntity(
     id = id,
-    value = value,
+    transaction = value,
     transactionType = transactionType.toTypeEntity(),
     balanceId = balanceId,
-    commission = commission.toCommissionEntity(),
     currency = currency,
     rate = rate,
     dateCreated = dateCreated,
@@ -20,11 +19,13 @@ fun Transaction.toTransactionEntity() = TransactionEntity(
 fun TransactionType.toTypeEntity() = TransactionTypeEntity.valueOf(this.name)
 
 fun Commission.toCommissionEntity() = CommissionEntity(
-    commissionType = commissionType.toCommissionTypeEntity(),
-    commission = commission,
-    commissionRate = commission
+    id = 0,
+    transactionId = transactionId,
+    type = type.toCommissionTypeEntity(),
+    fee = fee,
+    rate = rate,
+    base = base
 )
 
-fun CommissionType.toCommissionTypeEntity() =
-    CommissionTypeEntity.valueOf(this.name)
+fun CommissionType.toCommissionTypeEntity() = CommissionTypeEntity.valueOf(this.name)
 

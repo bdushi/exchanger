@@ -1,9 +1,9 @@
 package al.bruno.exchanger.currency.converter.api.rules
 
 import al.bruno.exchanger.currency.converter.api.domain.Commission
-import al.bruno.exchanger.currency.converter.api.domain.ExchangeRule
 import al.bruno.exchanger.currency.converter.api.domain.Transaction
 
-interface ExchangeRuleStrategy {
-    fun applyRule(transaction: Transaction, rule: ExchangeRule): Commission?
+// Core interfaces and base classes
+interface ExchangeRule {
+    fun apply(transaction: Transaction): Commission?
 }

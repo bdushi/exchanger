@@ -20,10 +20,9 @@ fun BalanceEntity.toBalance() =
 
 fun TransactionEntity.toTransaction() = Transaction(
     id = id,
-    value = value,
+    value = transaction,
     transactionType = transactionType.toType(),
     balanceId = balanceId,
-    commission = commission.toCommission(),
     currency = currency,
     rate = rate,
     dateCreated = dateCreated,
@@ -36,18 +35,11 @@ fun ExchangeRuleEntity.toExchangeRuleEntity() = ExchangeRule(
     id = id,
     description = description,
     condition = condition,
-    action = action.toRuleType(),
-    value = value,
+    type = action.toRuleType(),
+    rate = value,
+    priority = priority,
     dateCreated = dateCreated,
     lastUpdated = lastUpdated
 )
-
-fun CommissionEntity.toCommission() = Commission(
-    commissionType = commissionType.toCommissionType(),
-    commission = commission,
-    commissionRate = commissionRate
-)
-
-fun CommissionTypeEntity.toCommissionType() = CommissionType.valueOf(this.name)
 
 fun RuleTypeEntity.toRuleType() = RuleType.valueOf(this.name)
